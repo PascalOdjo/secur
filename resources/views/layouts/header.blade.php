@@ -45,8 +45,8 @@
                     </li>
                     <li class="list-inline-item">
                         <div class="settingbar">
-                            <a href="javascript:void(0)" id="infobar-settings-open" class="infobar-icon">
-                                <span class="iconbar"><i class="ri-settings-3-line"></i></span>
+                            <a href="javascript:void(0)" id="toggle-dark-mode" class="infobar-icon">
+                                <span class="iconbar"><i class="ri-sun-line"></i></span> <!-- Icône de luminosité -->
                             </a>
                         </div>
                     </li>
@@ -102,10 +102,15 @@
                             <div class="dropdown">
                               <a class="dropdown-toggle" href="#" role="button" id="profilelink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{asset('assets/images/users/profile.svg')}}" class="img-fluid" alt="profile"><span class="live-icon">{{Auth::user()->name}}</span></a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profilelink">
-                                    <a class="dropdown-item" href="#"><i class="ri-user-6-line"></i>My Profile</a>
+                                    <a class="dropdown-item" href="#"><i class="ri-user-6-line"></i>Mon Profil</a>
                                     <a class="dropdown-item" href="#"><i class="ri-mail-line"></i>Email</a>
                                     <a class="dropdown-item" href="#"><i class="ri-settings-3-line"></i>Settings</a>
-                                    <a class="dropdown-item text-danger" href="{{url('logout')}}"><i class="ri-shut-down-line"></i>Logout</a>
+                                    <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="ri-shut-down-line"></i>Déconnexion
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
                                 </div>
                             </div>
                         </div>                                   

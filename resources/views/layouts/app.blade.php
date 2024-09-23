@@ -14,6 +14,8 @@
     <!-- Fevicon -->
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">
     <!-- Start css -->
+    <link href="{{ asset('css/dark-mode.css') }}" rel="stylesheet"> <!-- Lien vers le fichier CSS externe -->
+
     <!-- Switchery css -->
     <link href="{{asset('assets/plugins/switchery/switchery.min.css')}}" rel="stylesheet">
     <!-- Apex css -->
@@ -25,6 +27,21 @@
     <link href="{{asset('assets/css/icons.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('assets/css/flag-icon.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet" type="text/css">
+    {{-- bootstrap --}}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    {{-- Dark Mode CSS --}}
+    <style>
+        body.dark-mode {
+    background-color: #121212; /* Couleur de fond sombre */
+    color: #ffffff; /* Couleur du texte clair */
+    }
+
+    body.dark-mode .navbar {
+    background-color: #1f1f1f; /* Couleur de la barre de navigation sombre */   
+    }   
+
+    /* Ajoutez d'autres styles pour les éléments que vous souhaitez modifier en mode sombre */
+    </style>
     <!-- End css -->
 </head>
 <body class="vertical-layout">    
@@ -114,6 +131,31 @@
     <!-- Core js -->
     <script src="{{asset('assets/js/core.js')}}"></script>
     <!-- End js -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>  
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script> 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleButton = document.getElementById('toggle-dark-mode');
+            const body = document.body;
+    
+            // Vérifiez si le mode sombre est déjà activé
+            if (localStorage.getItem('dark-mode') === 'enabled') {
+                body.classList.add('dark-mode');
+            }
+    
+            toggleButton.addEventListener('click', function () {
+                body.classList.toggle('dark-mode');
+    
+                // Enregistrez l'état du mode sombre dans le stockage local
+                if (body.classList.contains('dark-mode')) {
+                    localStorage.setItem('dark-mode', 'enabled');
+                } else {
+                    localStorage.setItem('dark-mode', 'disabled');
+                }
+            });
+        });
+    </script>
 </body>
 
 <!-- Mirrored from themesbox.in/admin-templates/olian/html/light-vertical/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Aug 2024 11:04:20 GMT -->

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Console\Scheduling\Schedule; 
 
 class Kernel extends HttpKernel
 {
@@ -27,6 +28,8 @@ class Kernel extends HttpKernel
         'web' => [
             // Middlewares pour le groupe web ici
             \Illuminate\Auth\Middleware\Authenticate::class,
+            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+
         ],
 
         'api' => [
@@ -52,4 +55,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+
+   
+    
 }

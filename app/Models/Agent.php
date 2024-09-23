@@ -16,6 +16,7 @@ class Agent extends Model
         'addresse',
         'sexe',
         'nationalite',
+        'age',
         'taille',
         'type_contrat',
         'date_debut_contrat',
@@ -33,5 +34,13 @@ class Agent extends Model
         'updated_at',
         
     ];
-    
+
+    protected $casts = [
+        'taille' => 'decimal:2',
+    ];
+
+    public function personneaprevenir()
+    {
+    return $this->hasMany(PersonneAPrevenir::class);
+    }
 }
