@@ -43,7 +43,7 @@
                         <form method="POST" action="{{ route('admin.vacations.update', $vacation->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            @include('admin.vacations.create', ['isEdit' => true, 'vacation' => $vacation])  <!-- include create form and past data -->
+                            @include('admin.vacations.create', ['isEdit' => true, 'vacation' => $vacation])  <!-- include edit form and past data for agents modification -->
 
                             <button type="submit" class="btn btn-primary">Mettre à jour</button> 
                             <a href="{{route('admin.vacations.index')}}" class="btn btn-secondary"><i class="ri-arrow-go-back-line mr-2"></i>Annuler</a> 

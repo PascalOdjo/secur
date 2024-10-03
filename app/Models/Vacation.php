@@ -31,4 +31,8 @@ class Vacation extends Model
     public function site(){
         return $this->belongsTo(Site::class);
     }
+
+    public function invoice(){
+        return $this->hasOne(Invoice::class);
+    }
 }

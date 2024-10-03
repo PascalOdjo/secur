@@ -17,4 +17,14 @@ class Client extends Model
         'adresse',
         'entreprise',
     ];
+
+    public function site()
+    {
+        return $this->hasMany(Site::class);
+    }
+
+    public function demandes()
+    {
+        return $this->hasMany(Demande::class);
+    }
 }

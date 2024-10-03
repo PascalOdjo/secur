@@ -16,8 +16,8 @@
             <span>Enregistrements</span><i class="ri-arrow-right-s-line"></i>
         </a>
         <ul class="vertical-submenu">
-            <li><a href="{{route('admin.enregistrements.create')}}">Enregistrement</a></li>
-            <li><a href="{{route('admin.enregistrements.index')}}">Liste des enregistrements</a></li>
+            <li><a href="{{route('admin.demandes.create')}}">Enregistrement</a></li>
+            <li><a href="{{route('admin.demandes.index')}}">Liste des enregistrements</a></li>
         </ul>
     </li>
     <li>
@@ -78,6 +78,17 @@
                     <li><a href="apps-email-compose.html">Administration</a></li>
                 </ul>
             </li>
+            
+        </ul>
+    </li>
+    <li>
+        <a href="javaScript:void();">
+          <i class="ri-todo-line"></i><span>Facturations</span><i class="ri-arrow-right-s-line"></i>
+        </a>
+        <ul class="vertical-submenu">
+            <li><a href="{{route('admin.invoices.create')}}">Clients</a></li> 
+            <li><a href="{{route('admin.invoices.create')}}">Agents</a></li>
+            
             
         </ul>
     </li>

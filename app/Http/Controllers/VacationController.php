@@ -13,18 +13,29 @@ class VacationController extends Controller
 {
     public function index()
     {
-        $vacations = Vacation::with(['agent1', 'agent2'])->get(); // Récupère les vacations avec les agents assignés
-        return view('admin.vacations.index', compact('vacations'));
+    // Récupère les vacations avec les agents assignés et le site
+    $vacations = Vacation::with(['agent1', 'agent2', 'site'])->paginate(3);
 
+    return view('admin.vacations.index', compact('vacations'));
     }
+
 
     public function create()
-    {
-        $agents = Agent::all(); // Récupération de tous les agents
-        $sites = Site::all();   // Récupération de tous les sites
+{
+    $agentsDejaAffectes = Vacation::where('status', 'en_cours')
+        ->orWhere('status', 'affecte')  
+        ->pluck('agent_1_id') // Récupérer uniquement agent_1_id
+        ->merge(Vacation::where('status', 'en_cours')->orWhere('status', 'affecte')->pluck('agent_2_id')) // Ajouter agent_2_id
+        ->unique() // Éliminer les doublons
+        ->toArray();
 
-        return view('admin.vacations.create', compact('agents', 'sites')); // Passer les agents et les sites à la vue
-    }
+    // Liste des agents disponibles (ceux qui ne sont pas dans $agentsDejaAffectes)
+    $agentsDisponibles = Agent::whereNotIn('id', $agentsDejaAffectes)->get();
+    // Récupération de tous les sites
+    $sites = Site::all();
+
+    return view('admin.vacations.create', compact('agents', 'sites', 'agentsDisponibles')); // Passer les agents et les sites à la vue
+}
 
     public function store(Request $request){
         try{
@@ -57,9 +68,10 @@ class VacationController extends Controller
             return redirect()->back()->with('error', 'Un ou plusieurs agents sont déjà assignés à une vacation pendant cette période.');
         }
 
-        $code_vacation = strtoupper(uniqid('VAC - ')); // génération de code unique pour la vacation
+        $code_vacation = strtoupper(uniqid('VAC -')); // génération de code unique pour la vacation
 
         $vacation = new Vacation([
+            dd($validated),
             'code_vacation'=>$code_vacation,
             'type_vacation'=>$validated['type_vacation'],
             'shift'=>$validated['shift'],

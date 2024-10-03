@@ -13,10 +13,12 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\VacationController;
 use App\Http\Controllers\PointageController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\EnregistrementController;
+use App\Http\Controllers\DemandeController;
+use App\Http\Controllers\InvoiceController;
+
 
 Route::get('/', function () {
-    return view('auth/login');
+    return view('home');
 });
 
 // Utilisez Auth::routes() au lieu de définir manuellement les routes d'authentification
@@ -40,7 +42,10 @@ Route::middleware(['auth'])->group(function() {
         Route::resource('sites', SiteController::class);
         Route::resource('pointages', PointageController::class);
         Route::resource('clients', ClientController::class);
-        Route::resource('enregistrements', EnregistrementController::class);
+        Route::resource('demandes', DemandeController::class);
+        Route::resource('invoices', InvoiceController::class);
+        Route::post('invoices/{id}/pay', [InvoiceController::class, 'pay'])->name('admin.invoices.pay');
+        Route::post('invoices/{id}/processPayment', [InvoiceController::class, 'processPayment'])->name('admin.invoices.processPayment');
     });
 
     // Routes pour les agents
