@@ -169,17 +169,17 @@
                                 <div class="avatar-group">
                                     <div class="avatar">
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="John Doe">
-                                            <img src="assets/images/users/men.svg" alt="avatar" class="rounded-circle">
+                                            <img src="{{asset('public/assets/images/users/men.svg')}}" alt="avatar" class="rounded-circle">
                                         </a>
                                     </div>
                                     <div class="avatar">
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="John Doe">
-                                            <img src="assets/images/users/women.svg" alt="avatar" class="rounded-circle">
+                                            <img src="{{asset('public/assets/images/users/women.svg')}}" alt="avatar" class="rounded-circle">
                                         </a>
                                     </div>
                                     <div class="avatar">
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="John Doe">
-                                            <img src="assets/images/users/boy.svg" alt="avatar" class="rounded-circle">
+                                            <img src="{{asset('public/assets/images/users/boy.svg')}}" alt="avatar" class="rounded-circle">
                                         </a>
                                     </div>
                                 </div>

@@ -8,13 +8,14 @@ use App\Models\Agent;
 use Carbon\Carbon;
 use App\Models\site;
 use App\Models\pointage;
+use App\Services\VacationCodeGenerator;
 
 class VacationController extends Controller
 {
     public function index()
     {
     // Récupère les vacations avec les agents assignés et le site
-    $vacations = Vacation::with(['agent1', 'agent2', 'site'])->paginate(3);
+    $vacations = Vacation::with(['agent1', 'agent2', 'site'])->paginate(5);
 
     return view('admin.vacations.index', compact('vacations'));
     }
@@ -22,6 +23,8 @@ class VacationController extends Controller
 
     public function create()
 {
+    // Récupération de tous les agents disponibles
+    $agents = Agent::all();
     $agentsDejaAffectes = Vacation::where('status', 'en_cours')
         ->orWhere('status', 'affecte')  
         ->pluck('agent_1_id') // Récupérer uniquement agent_1_id
@@ -37,80 +40,93 @@ class VacationController extends Controller
     return view('admin.vacations.create', compact('agents', 'sites', 'agentsDisponibles')); // Passer les agents et les sites à la vue
 }
 
-    public function store(Request $request){
-        try{
-            $validated = $request->validate([
-            'type_vacation'=>'required|in:sys_12,sys_08',
-            'shift'=>'required|in:jour,apres_midi,nuit,journee_entiere,evenementiel',
-            'status'=>'required|in:cree,en_cours,affecte,termine',
+public function store(Request $request)
+{
+    try {
+        $validated = $request->validate([
+            'type_vacation' => 'required|in:sys_12,sys_08',
+            'shift' => 'required|in:jour,nuit,journee_entiere',
+            'status' => 'required|in:cree,en_cours,affecte,termine',
             'start_time' => 'required|date',
-            'end_time' => 'required|date',    
+            'end_time' => 'required|date',
             'agent_1_id' => 'required|exists:agents,id',
             'agent_2_id' => 'required|exists:agents,id',
-            'site_id' => 'nullable|exists:sites,id', // validation du site
+            'site_id' => 'nullable|exists:sites,id',
         ]);
 
-        // Vérification si l'agent 1 est déjà affecté à une vacation
-        $agent1Occupied = Vacation::where('agent_1_id', $validated['agent_1_id'])
-        ->orWhere('agent_2_id', $validated['agent_1_id'])
-        ->where('start_time', '<=', $validated['end_time'])
-        ->where('end_time', '>=', $validated['start_time'])
-        ->exists();
+        $generator = new VacationCodeGenerator();
 
-        // Vérification si l'agent 2 est déjà affecté à une vacation
-        $agent2Occupied = Vacation::where('agent_1_id', $validated['agent_2_id'])
-        ->orWhere('agent_2_id', $validated['agent_2_id'])
-        ->where('start_time', '<=', $validated['end_time'])
-        ->where('end_time', '>=', $validated['start_time'])
-        ->exists();
-
-        if ($agent1Occupied || $agent2Occupied) {
-            return redirect()->back()->with('error', 'Un ou plusieurs agents sont déjà assignés à une vacation pendant cette période.');
+        $vacationCodes = [];
+        switch ($validated['shift']) {
+            case 'jour':
+                $vacationCodes = array_merge(
+                    $generator->generateVacationCodes($validated['agent_1_id'], false),
+                    $generator->generateVacationCodes($validated['agent_2_id'], false)
+                );
+                break;
+            case 'nuit':
+                $vacationCodes = array_merge(
+                    $generator->generateVacationCodes($validated['agent_1_id'], true),
+                    $generator->generateVacationCodes($validated['agent_2_id'], true)
+                );
+                break;
+            case 'journee_entiere':
+                $vacationCodes = array_merge(
+                    $generator->generateVacationCodes($validated['agent_1_id'], false, true), // Day agents
+                    $generator->generateVacationCodes($validated['agent_2_id'], true, true)   // Night agents
+                );
+                break;
         }
 
-        $code_vacation = strtoupper(uniqid('VAC -')); // génération de code unique pour la vacation
-
-        $vacation = new Vacation([
-            dd($validated),
-            'code_vacation'=>$code_vacation,
-            'type_vacation'=>$validated['type_vacation'],
-            'shift'=>$validated['shift'],
-            'status'=>$validated['status'],
-            'start_time'=>$validated['start_time'],
-            'end_time'=>$validated['end_time'],
+        $vacation = Vacation::create([
+            'code_vacation' => implode('-', $vacationCodes),
+            'type_vacation' => $validated['type_vacation'],
+            'shift' => $validated['shift'],
+            'status' => $validated['status'],
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
             'agent_1_id' => $validated['agent_1_id'],
             'agent_2_id' => $validated['agent_2_id'],
-            
-            
+            'site_id' => $validated['site_id'],
         ]);
 
-        // Mettre à jour le statut de la vacation selon le pointage
-        // if ($validated['status'] === 'affecte') {
-        //     $vacation->status = 'en_cours';
-        // }
-
-        $vacation->save();
-
         return redirect()->route('admin.vacations.index')->with('success', 'Vacation créée avec succès !');
-        }catch(\Exception $e){
-            return redirect()->route('admin.vacations.index')->with('error', 'Erreur lors de la création de la vacation : ' . $e->getMessage());
-        }
+    } catch (\Exception $e) {
+        return redirect()->route('admin.vacations.index')->with('error', 'Erreur lors de la création de la vacation : ' . $e->getMessage());
     }
+}
+
 
     public function show($id){
         $vacation = Vacation::find($id);
         return view('admin.vacations.show', compact('vacation'));
     }
 
-    public function edit($id){
-        $vacation = Vacation::findOrFail($id);
-        // $sites = Site::all();
-        $agents = Agent::all();
-        return view('admin.vacations.edit', compact('vacation', 'agents'));
-    }
+    public function edit($id)
+{
+    $vacation = Vacation::findOrFail($id);
+    
+    // Récupération de tous les agents disponibles
+    $agents = Agent::all();
+    // Récupération de tous les sites
+    $sites = Site::all();
+    // Récupération des agents déjà affectés
+    $agentsDejaAffectes = Vacation::where('status', 'en_cours')
+        ->orWhere('status', 'affecte')  
+        ->pluck('agent_1_id')
+        ->merge(Vacation::where('status', 'en_cours')->orWhere('status', 'affecte')->pluck('agent_2_id'))
+        ->unique()
+        ->toArray();
+
+    // Liste des agents disponibles (ceux qui ne sont pas dans $agentsDejaAffectes)
+    $agentsDisponibles = Agent::whereNotIn('id', $agentsDejaAffectes)->get();
+
+    return view('admin.vacations.edit', compact('vacation', 'agents', 'agentsDisponibles', 'sites'));
+}
     
     public function update(Request $request, $id)
 {
+    $agents = Agent::all();
     try {
         // validation des données
         $request->validate([
@@ -130,6 +146,12 @@ class VacationController extends Controller
             'type_vacation', 'shift', 'status', 'start_time', 'end_time', 
             'agent_1_id', 'agent_2_id', 'site_id'
         ]));
+
+        // Mise à jour des agents
+        $vacation->agent_1_id = $request->agent_1_id;
+        $vacation->agent_2_id = $request->agent_2_id;
+
+        // Enregistrement des modifications
         $vacation->save();
 
         return redirect()->route('admin.vacations.index')->with('success', 'Vacation mise à jour avec succès !');
@@ -141,6 +163,7 @@ class VacationController extends Controller
         return redirect()->back()->with('error', 'Une erreur est survenue lors de la mise à jour de la vacation: ' . $e->getMessage())->withInput();
     }
 }
+
 
 
     public function destroy($id){

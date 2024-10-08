@@ -45,6 +45,38 @@
                             @method('PUT')
                             @include('admin.vacations.create', ['isEdit' => true, 'vacation' => $vacation])  <!-- include edit form and past data for agents modification -->
 
+                            <!-- Sélecteurs pour les agents -->
+                            <div class="form-group">
+                                <label for="agent_1_id">Agent 1:</label>
+                                <select name="agent_1_id" id="agent_1_id" class="form-control" required>
+                                    @foreach($agents as $agent)
+                                        <option value="{{ $agent->id }}" {{ $vacation->agent_1_id == $agent->id ? 'selected' : '' }}>
+                                            {{ $agent->nom }} {{$agent->prenom}}<!-- Remplacez 'name' par le champ approprié -->
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="agent_2_id">Agent 2:</label>
+                                <select name="agent_2_id" id="agent_2_id" class="form-control" required>
+                                    @foreach($agents as $agent)
+                                        <option value="{{ $agent->id }}" {{ $vacation->agent_2_id == $agent->id ? 'selected' : '' }}>
+                                            {{ $agent->nom }} {{$agent->prenom}} <!-- Remplacez 'name' par le champ approprié -->
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="site_id">Site</label>
+                                <select name="site_id" id="site_id" class="form-control" required>
+                                    <option value="" disabled {{ old('site_id') == '' ? 'selected' : '' }}>Choisir...</option>
+                                    @foreach ($sites as $site)
+                                        <option value="{{ $site->id }}" {{ $vacation->site_id == $site->id ? 'selected' : '' }}>{{ $site->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <button type="submit" class="btn btn-primary">Mettre à jour</button> 
                             <a href="{{route('admin.vacations.index')}}" class="btn btn-secondary"><i class="ri-arrow-go-back-line mr-2"></i>Annuler</a> 
                         </form>

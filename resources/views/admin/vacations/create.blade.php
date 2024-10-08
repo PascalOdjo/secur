@@ -77,7 +77,7 @@
                                     <select id="agent_1_id" class="form-control" name="agent_1_id" required>
                                         <option value="" disabled {{ old('agent_1_id') == '' ? 'selected' : '' }}>Choisir...</option>
                                         @if(isset($agentsDisponibles))
-                                            @foreach ($agentsDisponibles as $agent)
+                                            @foreach ($agents as $agent)
                                                 <option value="{{ $agent->id }}" {{ old('agent_1_id') == $agent->id ? 'selected' : '' }}>{{ $agent->nom }} {{ $agent->prenom }}</option>
                                             @endforeach
                                         @endif
@@ -89,7 +89,7 @@
                                     <select id="agent_2_id" class="form-control" name="agent_2_id" required>
                                         <option value="" disabled {{ old('agent_2_id') == '' ? 'selected' : '' }}>Choisir...</option>
                                         @if(isset($agentsDisponibles))
-                                            @foreach ($agentsDisponibles as $agent)
+                                            @foreach ($agents as $agent)
                                                 <option value="{{ $agent->id }}" {{ old('agent_2_id') == $agent->id ? 'selected' : '' }}>{{ $agent->nom }} {{ $agent->prenom }}</option>
                                             @endforeach
                                         @endif

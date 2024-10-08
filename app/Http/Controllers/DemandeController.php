@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Site;
 use App\Models\Demande;
 use App\Models\Vacation;
+use App\Services\VacationCodeGenerator;
 
 class DemandeController extends Controller
 {
@@ -29,35 +30,32 @@ class DemandeController extends Controller
         'client_id' => 'required|exists:clients,id',
         'site_id' => 'required|exists:sites,id',
         'status' => 'required|in:en_cours,affecte,termine,annule',
-        'type_contrat' => 'required|string',
+        'type_vacation' => 'required|in:sys_12,sys_08',
         'nombre_contrats' => 'required|integer|min:1',
         'description' => 'nullable|string',
         // 'agent_1_id' => 'required|exists:agents,id', // Validation de l'agent de jour
         // 'agent_2_id' => 'required|exists:agents,id', // Validation de l'agent de nuit
     ]);
 
-    // Vérifier que les agents ne sont pas déjà affecté à une autre vacation
-    // $agentsDejaAffectes = Vacation::where('agent_1_id', [$request->agent_1_id, $request->agent_2_id])
-    // ->orWhereIn('agent_2_id', [$request->agent_1_id, $request->agent_2_id])
-    // ->where('status', '!=', 'termine')
-    // ->exists();
-
-    // if ($agentsDejaAffectes) {
-    //     return redirect()->back()->with('error', 'Un ou plusieurs agents sont déjà assignés à une vacation pendant cette periode.');
-    // }                     
+                        
 
     // Création de la demande dans la base de données
+    $client = Client::findOrFail($request->client_id);
     $demande = new Demande([
         'client_id' => $request->client_id,
-        'site_id' => $request->site_id,
+        'site_id' => $client->site_id,
         'status' => $request->status,
-        'type_contrat' => $request->type_contrat,
+        'type_vacation' => $request->type_vacation,
         'nombre_contrats' => $request->nombre_contrats,
         'description' => $request->description,
     ]);
 
     // Sauvegarde de la demande
     $demande->save();
+
+    
+    // Instanciation du générateur de codes de vacations
+    $generator = new VacationCodeGenerator();
 
     // Création des vacations en fonction du nombre de contrats
     for ($i = 1; $i <= $request->nombre_contrats; $i++) {
@@ -70,6 +68,15 @@ class DemandeController extends Controller
         $vacation->shift_nuit_start_time = '18:01';
         $vacation->shift_nuit_end_time = '06:00';
         $vacation->status = 'affecte'; // Par défaut, une vacation est affectée
+
+        // Déterminer si c'est une vacation de nuit ou de jour
+        $isNight = ($vacation->shift_jour_start_time > $vacation->shift_nuit_start_time); // Exemple de logique
+        $isFullDay = false; // Changez cette logique si nécessaire
+
+        // Génération des codes de vacation
+        $vacationCodes = $generator->generateVacationCodes($demande->id, $isNight, $isFullDay);
+        $vacation->code_vacation = implode('-', $vacationCodes); // Combine les codes générés
+
         $vacation->save();
 
         // Affectation des agents pour chaque vacation

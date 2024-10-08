@@ -1,0 +1,135 @@
+:root {
+    --primary-color: #1a237e;
+    --secondary-color: #ff3d00;
+    --text-color: #333;
+    --light-bg: #f5f5f5;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header-main {
+    background-color: var(--primary-color);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0d1757;
+    border-color: #0d1757;
+}
+
+.btn-light {
+    background-color: #fff;
+    color: var(--primary-color);
+}
+
+.btn-light:hover {
+    background-color: #f0f0f0;
+    color: var(--primary-color);
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.section-heading {
+    margin-bottom: 60px;
+}
+
+.card {
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.footer {
+    background-color: #0a0a0a;
+    color: #fff;
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--secondary-color);
+}
+
+.parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-dark-gradient {
+    background: linear-gradient(to bottom, #1a237e, #0a0a0a);
+}
+
+.hover-top:hover {
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+.theme-hover-bg:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.divider {
+    display: block;
+    margin: 20px auto;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 60px 0;
+    }
+
+    .section-heading {
+        margin-bottom: 40px;
+    }
+}

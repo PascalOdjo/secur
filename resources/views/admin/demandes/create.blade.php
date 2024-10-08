@@ -58,7 +58,7 @@
                                     <select id="site_id" name="site_id" class="form-control" required>
                                         <option value="">Sélectionner un site</option>
                                         @foreach ($sites as $site)
-                                            <option value="{{ $site->id }}">{{ $site->name }}</option>
+                                            <option value="{{ $site->id }}" data-client="{{ $site->client_id }}">{{ $site->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -75,8 +75,11 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="type_contrat">Type de contrat</label>
-                                    <input type="text" id="type_contrat" name="type_contrat" class="form-control" value="{{ old('type_contrat') }}" required>
+                                    <label for="type_vacation">Type de Vacation :</label>
+                                    <select id="type_vacation" name="type_vacation" class="form-control" required>
+                                        <option value="sys_12">Système 12</option>
+                                        <option value="sys_08">Système 08</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -99,4 +102,6 @@
         </div>
     </div>
 </div>
+
+
 @endsection

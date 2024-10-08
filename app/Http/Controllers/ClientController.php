@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Client;
+use App\Models\site;
 
 class ClientController extends Controller
 {
@@ -48,6 +49,17 @@ class ClientController extends Controller
             'entreprise' => 'required',
             'passport_photo' => 'nullable|image|mimes:pdf,jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        // Enregistrer le site
+        try{
+            $site = Site::create([
+                'name' =>$request->entreprise,
+                'address' =>$request->adresse,
+            ]);
+        }catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erreur lors de la création du Site :' .$e->getMessage());
+        }
+
         $client = new Client();
         $client->nom = $request->nom;
         $client->prenom = $request->prenom;
@@ -55,8 +67,7 @@ class ClientController extends Controller
         $client->telephone = $request->telephone;
         $client->adresse = $request->adresse;
         $client->entreprise = $request->entreprise;
-       
-       
+        $client->site_id = $site->id;
 
         // gestion du telechrgement de l'image
         if($request->hasFile('passport_photo')){

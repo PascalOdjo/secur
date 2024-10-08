@@ -107,16 +107,18 @@ class InvoiceController extends Controller
         // Validation des données
         $request->validate([
             'total_amount' => 'required|numeric',
+            'status' => 'required|string',
         ]);
 
         // Récupérer la facture
         $invoice = Invoice::findOrFail($id);
 
-        // Mettre à jour le montant total de la facture
+        // Mettre à jour les champs
         $invoice->total_amount = $request->total_amount;
+        $invoice->status = $request->status; // Assurez-vous que le statut est mis à jour
         $invoice->save();
 
-        return redirect()->route('admin.invoices.edit', $id)->with('success', 'Facture mise à jour avec succès.');
+        return redirect()->route('admin.invoices.index')->with('success', 'La facture a été mise à jour avec succès.');
     }
 
     public function edit($id)

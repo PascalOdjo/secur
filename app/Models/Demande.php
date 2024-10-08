@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Demande extends Model
 {
-    protected $fillable = ['client_id', 'site_id', 'description', 'nombre_contrats', 'type_contrat', 'status'];
+    protected $fillable = ['client_id', 'site_id', 'description', 'nombre_contrats', 'type_vacation', 'status'];
 
     public function client()
     {
