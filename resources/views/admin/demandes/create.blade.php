@@ -85,7 +85,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="nombre_contrats">Nombre de contrats</label>
+                                    <label for="nombre_contrats">Nombre d'agents</label>
                                     <input type="number" id="nombre_contrats" name="nombre_contrats" class="form-control" value="{{ old('nombre_contrats') }}" required min="1">
                                 </div>
                                 <div class="form-group col-md-6">

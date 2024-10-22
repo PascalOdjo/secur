@@ -43,7 +43,7 @@ class DemandeController extends Controller
     $client = Client::findOrFail($request->client_id);
     $demande = new Demande([
         'client_id' => $request->client_id,
-        'site_id' => $client->site_id,
+        'site_id' => $request->site_id,
         'status' => $request->status,
         'type_vacation' => $request->type_vacation,
         'nombre_contrats' => $request->nombre_contrats,
@@ -75,7 +75,7 @@ class DemandeController extends Controller
 
         // Génération des codes de vacation
         $vacationCodes = $generator->generateVacationCodes($demande->id, $isNight, $isFullDay);
-        $vacation->code_vacation = implode('-', $vacationCodes); // Combine les codes générés
+        $vacation->code_vacation = implode('  ', $vacationCodes); // Combine les codes générés
 
         $vacation->save();
 

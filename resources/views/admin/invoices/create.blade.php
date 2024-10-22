@@ -17,7 +17,10 @@
             <div class="col-md-4 col-lg-4">
                 <div class="widgetbar">
                     <a href="{{ route('admin.invoices.index') }}" class="btn btn-primary"><i class="ri-arrow-left-line mr-2"></i> Retour</a>
+                    <a href="{{ route('admin.invoices.index') }}" class="btn btn-primary"><i class="ri-todo-line mr-2"></i> Factures</a>
                 </div>                        
+            </div>
+                                   
             </div>
         </div>
     </div>

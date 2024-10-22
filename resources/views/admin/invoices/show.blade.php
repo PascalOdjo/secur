@@ -36,9 +36,21 @@
                         <p><strong>Statut :</strong> {{ ucfirst($invoice->status) }}</p>
                         <p><strong>Date de Création :</strong> {{ $invoice->created_at->format('d/m/Y') }}</p>
 
+                        @if($invoice->demande)
+                            <h6>Client :</h6>
+                            <p><strong>Nom :</strong> {{ $invoice->demande->client->nom }}</p>
+                            <p><strong>Adresse :</strong> {{ $invoice->demande->client->adresse }}</p>
+                            <p><strong>Contact :</strong> {{ $invoice->demande->client->contact }}</p>
+                        @else
+                            <p>Aucun client associé.</p>
+                        @endif
+
                         @if($invoice->vacation)
                             <h6>Vacation Associée :</h6>
                             <p><strong>Description :</strong> {{ $invoice->vacation->description }}</p>
+                            <p><strong>Statut :</strong> {{ ucfirst($invoice->vacation->status) }}</p>
+                            <p><strong>Heure de Début :</strong> {{ $invoice->vacation->start_time->format('d/m/Y H:i:s') }}</p>
+                            <p><strong>Heure de Fin :</strong> {{ $invoice->vacation->end_time->format('d/m/Y H:i:s') }}</p>
                         @else
                             <p>Aucune vacation associée.</p>
                         @endif

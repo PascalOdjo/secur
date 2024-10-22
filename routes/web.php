@@ -17,14 +17,17 @@ use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\InvoiceController;
 
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::view('/', 'home')->name('home');
+Route::view('/about-us', 'about-us')->name('about-us');
+
+Route::view('/contact-us', 'contact-us')->name('contact-us');
+Route::view('/services', 'services')->name('services');
+Route::view('/requete', 'requete')->name('requete');
 
 // Utilisez Auth::routes() au lieu de définir manuellement les routes d'authentification
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Routes pour la réinitialisation du mot de passe
 Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -35,6 +38,8 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 // Routes protégées
 Route::middleware(['auth'])->group(function() {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/contact-us', [ContactController::class, 'index'])->name('contact-us');
+    Route::post('/admin/demandes.store', [DemandeController::class, 'store'])->name('admin.demandes.store');
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('agents', AgentController::class);

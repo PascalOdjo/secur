@@ -1,190 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('header')
+@section('title', 'A propos')
 
-<head>
-    <title>SecureGuard - Professional Security Services</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="{{asset('css/styles.css')}}" rel="stylesheet">
-</head>
-
-<body>
-    <div id="loading" class="preloader">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-
-    <header class="header-main header-dark header-option-1 shadow-lg">
-        <div class="header-top small bg-dark border-bottom">
-            <div class="container">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="nav dark-link d-none d-lg-flex">
-                        <a class="me-4" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="me-4" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="me-4" href="#"><i class="fab fa-instagram"></i></a>
-                        <a class="me-4" href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center w-100 w-lg-auto dark-link">
-                        <ul class="nav ms-auto ms-lg-3">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="header-middle navbar navbar-expand-lg navbar-light bg-white py-4 py-lg-5">
-            <div class="container">
-                <div class="d-flex w-100">
-                    <div class="col-6 col-md-3">
-                        <a class="navbar-brand" href="index.html">
-                            <img src="static/img/logo.svg" title="" alt="SecureGuard">
-                        </a>
-                    </div>
-                    <div class="col-6 col-md-9">
-                        <div class="nav flex-nowrap align-items-center justify-content-end">
-                            <button class="navbar-toggler ms-auto me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="nav text-dark d-none d-lg-flex">
-                                <div class="d-flex ms-4">
-                                    <div class="only-icon only-icon lh-1 text-primary">
-                                        <i class="bi bi-clock"></i>
-                                    </div>
-                                    <div class="col ps-2 small lh-sm">
-                                        <span>24/7 Availability<br />Always on duty</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex ms-4">
-                                    <div class="only-icon only-icon lh-1 text-primary">
-                                        <i class="bi bi-phone"></i>
-                                    </div>
-                                    <div class="col ps-2 small lh-sm">
-                                        <span>1-800-SECURE<br /><a href="mailto:info@secureguard.com">info@secureguard.com</a></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <nav class="navbar navbar-expand-lg navbar-dark py-0 bg-primary z-index-1">
-            <div class="container">
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Our Team</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Contact Us</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="nav flex-nowrap align-items-center d-none d-lg-flex">
-                    <div class="nav-item d-none d-xl-block">
-                        <a href="#" class="btn btn-sm btn-light mb-0 mx-2 text-nowrap">Get a Quote</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
-
+@section('content')
     <main>
-        <section class="parallax effect-section" style="background-image: url(https://images.unsplash.com/photo-1582139329536-e7284fbc2742?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80);">
-            <div class="mask bg-black opacity-7"></div>
-            <div class="container position-relative">
-                <div class="row min-vh-65 justify-content-center align-items-center py-6 py-md-12 g-4">
-                    <div class="col-lg-6 col-xl-5">
-                        <h6 class="text-white">Professional Security Services</h6>
-                        <h1 class="display-4 pt-3 text-white">Protecting What Matters Most</h1>
-                        <div class="pt-2">
-                            <a class="btn btn-primary me-1 mb-1" href="#">Our Services</a>
-                            <a class="btn btn-light me-1 mb-1" href="#">Contact Us</a>
+        <section class="slider">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="banner-content">
+                            <h1>Agence de Sécurité <span>et de gardiennage</span></h1>
+                            <ol>
+                                <li><a href="#">Learn More</a></li>
+                                <li><a href="#">Get In Touch</a></li>
+                            </ol>
                         </div>
+                    <img class="d-block w-100" src="{{asset('asset/images/banner/slider-01.jpg')}}">
                     </div>
-                    <div class="col-lg-6 col-xl-5 col-xxl-4 ms-auto">
-                        <div class="card">
-                            <div class="card-body p-4 p-lg-5">
-                                <div class="text-center">
-                                    <h5 class="h3">Request a Free Quote</h5>
-                                    <p>Secure your property today</p>
-                                </div>
-                                <form>
-                                    <div class="form-floating mb-4">
-                                        <input id="contact-name" type="text" name="name" placeholder="John Doe" class="form-control">
-                                        <label class="form-label" for="contact-name">Your Name</label>
-                                    </div>
-                                    <div class="form-floating mb-4">
-                                        <input id="contact-email" type="email" name="email" placeholder="name@example.com" class="form-control">
-                                        <label class="form-label" for="contact-email">Email Address</label>
-                                    </div>
-                                    <div class="form-floating mb-4">
-                                        <input id="contact-phone" type="text" name="phone" placeholder="+1 234 567 8900" class="form-control">
-                                        <label class="form-label" for="contact-phone">Phone</label>
-                                    </div>
-                                    <button class="btn btn-primary w-100" type="submit">Get a Free Quote</button>
-                                </form>
-                            </div>
+                    <div class="carousel-item">
+                        <div class="banner-content">
+                            <h1>Nous sommes une équipe <span>d'expert pour vous servir !</span></h1>
+                            <ol>
+                                <li><a href="#">Learn More</a></li>
+                                <li><a href="#">Get In Touch</a></li>
+                            </ol>
                         </div>
+                    <img class="d-block w-100" src="{{asset('asset/images/banner/slider-02.jpg')}}">
+                    </div>
+                    <div class="carousel-item">
+                        <div class="banner-content">
+                            <h1>Nous assurons votre sécurité <span>et celle de vos sites</span></h1>
+                            <ol>
+                                <li><a href="#">Learn More</a></li>
+                                <li><a href="#">Get In Touch</a></li>
+                            </ol>
+                        </div>
+                    <img class="d-block w-100" src="{{asset('asset/images/banner/slider-03.jpg')}}">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section">
+        <section class="bg-01">
             <div class="container">
-                <div class="row justify-content-center section-heading">
-                    <div class="col-lg-8 col-xl-6 text-center">
-                        <h3 class="display-6 mb-4 font-w-300">Our <span class="font-w-700">Security Services</span></h3>
-                        <span class="divider h-3px bg-primary w-60px mx-auto mb-4"></span>
-                        <div class="lead">We offer a comprehensive range of security solutions to protect your assets, people, and peace of mind.</div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="heading">
+                            <span>Nos services</span>
+                            <h2>Des solutions uniques et adaptées à vos besoins</h2>
+                            <p>Notre agence de sécurité se distingue par un engagement inébranlable envers la protection de vos biens et de vos proches.
+                                Forts de nombreuses années d'expérience dans le secteur, 
+                                nos professionnels hautement qualifiés sont formés pour anticiper et neutraliser les menaces potentielles. 
+                                Grâce à des solutions sur mesure adaptées à vos besoins spécifiques, nous assurons une présence rassurante et efficace, 
+                                que ce soit pour des événements privés, la sécurité résidentielle ou la protection des entreprises.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="row g-3">
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="card position-relative hover-top theme-hover-bg">
-                            <div class="card-body text-center px-xl-6 py-6">
-                                <div class="icon icon-primary icon-xl rounded-circle mb-4 border-white border-2 border">
-                                    <i class="bi bi-shield-check"></i>
-                                </div>
-                                <h5><a class="stretched-link text-reset" href="#">Armed Security</a></h5>
-                                <p class="m-0">Highly trained armed guards for maximum protection in high-risk environments.</p>
+
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="wrapper">
+                            <div class="icons">
+                                <i class="flaticon-data-driven"></i>
+                            </div>
+                            <div class="content w-100">
+                                <h4>Data Analytics</h4>
+                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et velit, 
+                                ullam distinctio hic possimus assumenda pariatur, ab non maxime officiis 
+                                fugit! Numquam debitis odio odit quisquam maiores quidem magnam dicta.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="card position-relative hover-top theme-hover-bg">
-                            <div class="card-body text-center px-xl-6 py-6">
-                                <div class="icon icon-primary icon-xl rounded-circle mb-4 border-white border-2 border">
-                                    <i class="bi bi-camera-video"></i>
-                                </div>
-                                <h5><a class="stretched-link text-reset" href="#">Surveillance Systems</a></h5>
-                                <p class="m-0">State-of-the-art video monitoring and security systems for comprehensive coverage.</p>
+
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="wrapper">
+                            <div class="icons">
+                                <i class="flaticon-money"></i>
+                            </div>
+                            <div class="content w-100">
+                                <h4>Revenue Growth</h4>
+                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et velit, 
+                                ullam distinctio hic possimus assumenda pariatur, ab non maxime officiis 
+                                fugit! Numquam debitis odio odit quisquam maiores quidem magnam dicta.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="card position-relative hover-top theme-hover-bg">
-                            <div class="card-body text-center px-xl-6 py-6">
-                                <div class="icon icon-primary icon-xl rounded-circle mb-4 border-white border-2 border">
-                                    <i class="bi bi-building"></i>
-                                </div>
-                                <h5><a class="stretched-link text-reset" href="#">Corporate Security</a></h5>
-                                <p class="m-0">Tailored security solutions for businesses, including access control and risk assessment.</p>
+
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="wrapper">
+                            <div class="icons">
+                                <i class="flaticon-computer"></i>
+                            </div>
+                            <div class="content w-100">
+                                <h4>Market Expansion</h4>
+                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et velit, 
+                                ullam distinctio hic possimus assumenda pariatur, ab non maxime officiis 
+                                fugit! Numquam debitis odio odit quisquam maiores quidem magnam dicta.</p>
                             </div>
                         </div>
                     </div>
@@ -192,77 +105,139 @@
             </div>
         </section>
 
-        <section class="section bg-gray-100">
+        <section class="bg-02">
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 my-3">
-                        <img src="https://images.unsplash.com/photo-1582139329536-e7284fbc2742?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" title="" alt="Security Guard" class="img-fluid rounded">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="image">
+                            <img src="{{asset('asset/images/abt-img/1000-1000.jpg')}}">
+                        </div>
                     </div>
-                    <div class="col-lg-6 my-3 ps-xl-12">
-                        <h6 class="text-primary">Why Choose Us</h6>
-                        <h3 class="h1">Your Safety is Our Top Priority</h3>
-                        <p class="lead">With years of experience and a commitment to excellence, SecureGuard is your trusted partner in security.</p>
-                        <ul class="list-type-01 pt-2">
-                            <li>Highly trained and certified security professionals</li>
-                            <li>24/7 monitoring and rapid response capabilities</li>
-                            <li>Customized security plans tailored to your specific needs</li>
-                            <li>State-of-the-art technology and equipment</li>
-                            <li>Comprehensive risk assessment and management</li>
-                        </ul>
-                        <div class="pt-5">
-                            <a class="btn btn-primary" href="#">
-                                <span class="btn--text">Learn More About Us</span>
-                                <span class="bi bi-arrow-right"></span>
-                            </a>
+                    <div class="col-md-6">
+                        <div class="heading">
+                            <span>How i work</span>
+                            <h2>find a new competitive edge</h2>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+                            Laudantium officia doloremque praesentium ullam odio eaque ab 
+                            consectetur voluptas vel nostrum doloribus</p>
+                        </div>
+
+                        <div class="wrapper">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="icon">
+                                        <i class="flaticon-archer"></i>
+                                        <h4>15</h4>
+                                        <h5>years of experience</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="icon">
+                                        <i class="flaticon-customer-satisfaction"></i>
+                                        <h4>255</h4>
+                                        <h5>truster clients</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="icon">
+                                        <i class="flaticon-video-call"></i>
+                                        <h4>20</h4>
+                                        <h5>visited Conferences</h5>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="icon">
+                                        <i class="flaticon-medal"></i>
+                                        <h4>40</h4>
+                                        <h5>master certifications</h5>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section">
+        <section class="bg-03">
             <div class="container">
-                <div class="row justify-content-center section-heading">
-                    <div class="col-lg-8 col-xl-6 text-center">
-                        <h3 class="display-6 mb-4 font-w-300">Meet <span class="font-w-700">Our Team</span></h3>
-                        <span class="divider h-3px bg-primary w-60px mx-auto mb-4"></span>
-                        <div class="lead">Our team of security experts is dedicated to providing you with the highest level of protection and peace of mind.</div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="heading">
+                            <span>Services</span>
+                            <h2>We position our clients at the forefront of their field 
+                            by advancing an agenda.</h2>
+                            <p>Easily apply to multiple jobs with one click! Quick Apply shows you 
+                            recommended jobs based off your most recent search and allows you to 
+                            apply to 25+ jobs in a matter of seconds!</p>
+                        </div>
                     </div>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-sm-6 col-md-3 my-3">
-                        <div class="card hover-top">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" title="" alt="" class="card-img-top">
-                            <div class="card-body p-3 text-center">
-                                <h6 class="mb-1">John Doe</h6>
-                                <span class="small">Chief Security Officer</span>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="content">
+                                <i class="flaticon-flowchart"></i>
+                                <h4>Sécurité Humaine</h4>
+                                <p> We develop the relationships that underpin the next phase in your 
+                                organisation’s growth. We do this</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 my-3">
-                        <div class="card hover-top">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" title="" alt="" class="card-img-top">
-                            <div class="card-body p-3 text-center">
-                                <h6 class="mb-1">Jane Smith</h6>
-                                <span class="small">Head of Operations</span>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="content">
+                                <i class="flaticon-coding"></i>
+                                <h4>Program management</h4>
+                                <p>The development of your next business plan will be executed by 
+                                a brilliant team who will indicate your grand success.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 my-3">
-                        <div class="card hover-top">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" title="" alt="" class="card-img-top">
-                            <div class="card-body p-3 text-center">
-                                <h6 class="mb-1">Mike Johnson</h6>
-                                <span class="small">Training Manager</span>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="content">
+                                <i class="flaticon-chess-pieces"></i>
+                                <h4>Strategy</h4>
+                                <p>The development of your next business plan will be executed by 
+                                a brilliant team who will indicate your grand success.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 my-3">
-                        <div class="card hover-top">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" title="" alt="" class="card-img-top">
-                            <div class="card-body p-3 text-center">
-                                <h6 class="mb-1">Sarah Brown</h6>
-                                <span class="small">Client Relations</span>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="content">
+                                <i class="flaticon-research"></i>
+                                <h4>chart management</h4>
+                                <p>The development of your next business plan will be executed by 
+                                a brilliant team who will indicate your grand success.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="content">
+                                <i class="flaticon-optimization"></i>
+                                <h4>SEO Optimization</h4>
+                                <p>The development of your next business plan will be executed by 
+                                a brilliant team who will indicate your grand success.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="content">
+                                <i class="flaticon-market-research"></i>
+                                <h4>Market Research</h4>
+                                <p>The development of your next business plan will be executed by 
+                                a brilliant team who will indicate your grand success.</p>
                             </div>
                         </div>
                     </div>
@@ -270,137 +245,317 @@
             </div>
         </section>
 
-        <section class="py-5 border-top effect-section parallax" style="background-image: url(https://images.unsplash.com/photo-1582139329536-e7284fbc2742?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1280&q=80);">
-            <div class="mask opacity-9 bg-primary"></div>
-            <div class="container position-relative text-white">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 text-center text-lg-start my-3">
-                        <h4 class="h2 mb-2">Ready to Secure Your Property?</h4>
-                        <p class="m-0 small w-lg-80">Get a free consultation and find out how we can protect what matters most to you.</p>
+        <section class="bg-04">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="heading">
+                            <h2>Flexible Plans For <br> Small To Fast-Growing Company.</h2>
+                            <p>Switch to annual plan and get 25% offer.</p>
+                        </div>
                     </div>
-                    <div class="col-lg-4 text-center text-lg-end my-3">
-                        <a class="btn btn-light btn shadow" href="#">
-                            <i class="bi bi-shield-check"></i>
-                            <span class="btn--text">
-                                Get a Free Quote
-                            </span>
-                        </a>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="head-content">
+                                <div class="d-flex align-items-center flex-wrap justify-content-between">
+                                    <h4>Basic Blan</h4>
+                                    <h5>$20.00 <span>/ mo</span></h5>
+                                </div>
+                            </div>
+                            <div class="inner-content">
+                                <div class="list-content">
+                                    <h5>Most Recommended</h5>
+                                </div>
+                                <h6>Power of choice is untrammelled and do what we like best.</h6>
+                                <ol>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>4-5 Weeks from to finish</li>
+                                    <li><i class="fal fa-arrow-circle-right"></i>Data sprint</li>
+                                    <li><i class="fal fa-arrow-circle-right"></i>Results revision</li>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>20 Days of support</li>
+                                </ol>
+                                <a href="#">Get Started a free trail</a>
+                                <p>no credit card required</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="head-content">
+                                <div class="d-flex align-items-center flex-wrap justify-content-between">
+                                    <h4>for Large Business</h4>
+                                    <h5>$30.00 <span>/ mo</span></h5>
+                                </div>
+                            </div>
+                            <div class="inner-content">
+                                <div class="list-content">
+                                    <h5 class="active-plan">Most Recommended</h5>
+                                </div>
+                                <h6>Power of choice is untrammelled and do what we like best.</h6>
+                                <ol>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>4-5 Weeks from to finish</li>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>Data sprint</li>
+                                    <li><i class="fal fa-arrow-circle-right"></i>Results revision</li>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>20 Days of support</li>
+                                </ol>
+                                <a class="active-a" href="#">Get Started a free trail</a>
+                                <p>no credit card required</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="wrapper">
+                            <div class="head-content">
+                                <div class="d-flex align-items-center flex-wrap justify-content-between">
+                                    <h4>Advanced Pack</h4>
+                                    <h5>$50.00 <span>/ mo</span></h5>
+                                </div>
+                            </div>
+                            <div class="inner-content">
+                                <div class="list-content">
+                                    <h5>Most Recommended</h5>
+                                </div>
+                                <h6>Power of choice is untrammelled and do what we like best.</h6>
+                                <ol>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>4-5 Weeks from to finish</li>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>Data sprint</li>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>Results revision</li>
+                                    <li class="se-color"><i class="fal fa-check-circle"></i>20 Days of support</li>
+                                </ol>
+                                <a href="#">Get Started a free trail</a>
+                                <p>no credit card required</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="textimonial-client">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="heading">
+                            <h2><span>Success</span> stories</h2>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="wrapper">
+                            <div id="custCarousel-02" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <div class="content">
+                                            <h3>Anliee Albert</h3>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae aspernatur 
+                                            libero hic? Ad aut veritatis eaque totam, architecto inventore nulla 
+                                            asperiores eum consequatur cum? Amet ab excepturi pariatur. Quas, adipisci.</p>
+                                            <a><img src="{{asset('asset/images/team/1.jpg')}}"></a>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <div class="content">
+                                            <h3>Anliee Albert</h3>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae aspernatur 
+                                            libero hic? Ad aut veritatis eaque totam, architecto inventore nulla 
+                                            asperiores eum consequatur cum? Amet ab excepturi pariatur. Quas, adipisci.</p>
+                                            <a><img src="{{asset('asset/images/team/2.jpg')}}"></a>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <div class="content">
+                                            <h3>Anliee Albert</h3>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae aspernatur 
+                                            libero hic? Ad aut veritatis eaque totam, architecto inventore nulla 
+                                            asperiores eum consequatur cum? Amet ab excepturi pariatur. Quas, adipisci.</p>
+                                            <a><img src="{{asset('asset/images/team/2.jpg')}}"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ol class="carousel-indicators">
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-05">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="heading">
+                            <h2>Notre Équipe</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="team-wrapper">
+                            <div class="team-img">
+                                <img src="{{asset('asset/images/team/1.jpg')}}">
+                            </div>
+                            <div class="team-content">
+                                <h3>James</h3>
+                                <p>Designer</p>
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-behance"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="team-wrapper">
+                            <div class="team-img">
+                                <img src="{{asset('asset/images/team/3.jpg')}}">
+                            </div>
+                            <div class="team-content">
+                                <h3>Albert</h3>
+                                <p>Art Designer</p>
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-behance"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="team-wrapper">
+                            <div class="team-img">
+                                <img src="{{asset('asset/images/team/2.jpg')}}">
+                            </div>
+                            <div class="team-content">
+                                <h3>Johns</h3>
+                                <p>SEO</p>
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-behance"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="team-wrapper">
+                            <div class="team-img">
+                                <img src="{{asset('asset/images/team/4.jpg')}}">
+                            </div>
+                            <div class="team-content">
+                                <h3>Smith</h3>
+                                <p>Developer</p>
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-behance"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-06">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="heading">
+                            <h2>Our News</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <article class="blog-sub">
+                            <div class="blog-content">
+                                <img src="{{asset('asset/images/blog/1.jpg')}}">
+                            </div>
+                            <div class="blog-content-section">
+                                <div class="blo-content-title">
+                                    <h4>The National Minimum Wage Is An Important Part</h4>
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Neque at numquam, asperiores aut
+                                        praesentium
+                                        facilis ratione! Voluptatibus neque dignissimos ipsa atque veniam sint omnis in blanditiis, nemo
+                                        fugit
+                                        animi assumenda.</p>
+                                </div>
+                                <div class="blog-admin">
+                                    <ol>
+                                        <li><i class="fal fa-user-tie"></i> By Admin</li>
+                                        <li><i class="fal fa-calendar-alt"></i> july 28, 2020</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <article class="blog-sub">
+                            <div class="blog-content">
+                                <img src="{{asset('asset/images/blog/2.jpg')}}">
+                            </div>
+                            <div class="blog-content-section">
+                                <div class="blo-content-title">
+                                    <h4>The National Minimum Wage Is An Important Part</h4>
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Neque at numquam, asperiores aut
+                                        praesentium
+                                        facilis ratione! Voluptatibus neque dignissimos ipsa atque veniam sint omnis in blanditiis, nemo
+                                        fugit
+                                        animi assumenda.</p>
+                                </div>
+                                <div class="blog-admin">
+                                    <ol>
+                                        <li><i class="fal fa-user-tie"></i> By Admin</li>
+                                        <li><i class="fal fa-calendar-alt"></i> july 28, 2020</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <article class="blog-sub">
+                            <div class="blog-content">
+                                <img src="{{asset('asset/images/blog/3.jpg')}}">
+                            </div>
+                            <div class="blog-content-section">
+                                <div class="blo-content-title">
+                                    <h4>The National Minimum Wage Is An Important Part</h4>
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Neque at numquam, asperiores aut
+                                        praesentium
+                                        facilis ratione! Voluptatibus neque dignissimos ipsa atque veniam sint omnis in blanditiis, nemo
+                                        fugit
+                                        animi assumenda.</p>
+                                </div>
+                                <div class="blog-admin">
+                                    <ol>
+                                        <li><i class="fal fa-user-tie"></i> By Admin</li>
+                                        <li><i class="fal fa-calendar-alt"></i> july 28, 2020</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </article>
                     </div>
                 </div>
             </div>
         </section>
     </main>
-
-    <footer class="bg-dark-gradient footer">
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 my-4">
-                        <div class="mb-5">
-                            <img src="static/img/logo-light.svg" title="" alt="SecureGuard">
-                        </div>
-                        <ul class="list-unstyled white-link">
-                            <li class="pb-3">
-                                <a href="#" class="media">
-                                    <div class="icon icon-primary icon-sm rounded-circle">
-                                        <i class="fs-6 lh-1 bi bi-map"></i>
-                    </div>
-                    <span class="media-body ps-3">
-                        123 Security Street, <br>Safetown, ST 12345
-                    </span>
-                </a>
-            </li>
-            <li class="pb-3">
-                <a href="#" class="media align-items-center">
-                    <div class="icon icon-primary icon-sm rounded-circle">
-                        <i class="fs-6 lh-1 bi bi-envelope"></i>
-                    </div>
-                    <span class="media-body ps-3">
-                        info@secureguard.com
-                    </span>
-                </a>
-            </li>
-            <li class="pb-3">
-                <a href="#" class="media align-items-center">
-                    <div class="icon icon-primary icon-sm rounded-circle">
-                        <i class="fs-6 lh-1 bi bi-phone"></i>
-                    </div>
-                    <span class="media-body ps-3">
-                        1-800-SECURE
-                    </span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="col-sm-6 col-lg-2 my-4">
-        <h5 class="text-white h6 mb-4">Our Services</h5>
-        <ul class="list-unstyled white-link footer-links">
-            <li><a href="#">Armed Security</a></li>
-            <li><a href="#">Surveillance Systems</a></li>
-            <li><a href="#">Corporate Security</a></li>
-            <li><a href="#">Event Security</a></li>
-            <li><a href="#">VIP Protection</a></li>
-        </ul>
-    </div>
-    <div class="col-sm-6 col-lg-2 my-4">
-        <h5 class="text-white h6 mb-4">Company</h5>
-        <ul class="list-unstyled white-link footer-links">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Our Team</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">News & Blog</a></li>
-            <li><a href="#">Contact Us</a></li>
-        </ul>
-    </div>
-    <div class="col-sm-6 col-lg-2 my-4">
-        <h5 class="text-white h6 mb-4">Support</h5>
-        <ul class="list-unstyled white-link footer-links">
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Site Map</a></li>
-        </ul>
-    </div>
-    <div class="col-sm-6 col-lg-3 my-4">
-        <h5 class="text-white h6 mb-5">Stay Connected</h5>
-        <form>
-            <div class="d-flex flex-column flex-md-row mb-2">
-                <input type="email" class="form-control me-md-2 mb-2 mb-md-0" placeholder="Enter your email">
-                <button class="btn btn-primary flex-shrink-0" type="submit">Subscribe</button>
-            </div>
-            <p class="text-white-50 m-0">Get updates on security tips and news.</p>
-        </form>
-    </div>
-</div>
-</div>
-</div>
-<div class="footer-bottom border-style top light">
-<div class="container">
-<div class="row">
-    <div class="col-md-6 my-3">
-        <div class="nav justify-content-center justify-content-md-start white-link">
-            <a class="fs-6 me-4" href="#"><i class="fab fa-facebook-f"></i></a>
-            <a class="fs-6 me-4" href="#"><i class="fab fa-twitter"></i></a>
-            <a class="fs-6 me-4" href="#"><i class="fab fa-instagram"></i></a>
-            <a class="fs-6 me-4" href="#"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-    </div>
-    <div class="col-md-6 my-3 text-center text-md-end text-white-50">
-        <p class="m-0">© 2023 SecureGuard. All rights reserved.</p>
-    </div>
-</div>
-</div>
-</div>
-</footer>
-
-<script src="static/js/jquery-3.5.1.min.js"></script>
-<script src="static/vendor/appear/jquery.appear.js"></script>
-<script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="static/vendor/counter/jquery.countTo.js"></script>
-<script src="static/vendor/owl-carousel/js/owl.carousel.min.js"></script>
-<script src="static/vendor/magnific/jquery.magnific-popup.min.js"></script>
-<script src="static/vendor/jarallax/jarallax-all.js"></script>
-<script src="static/js/custom.js"></script>
-</body>
-
-</html>
+@endsection
+    

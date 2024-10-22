@@ -7,6 +7,7 @@ use App\Models\Vacation;
 use App\Models\Agent;
 use Carbon\Carbon;
 use App\Models\site;
+use App\Models\Demande;
 use App\Models\pointage;
 use App\Services\VacationCodeGenerator;
 
@@ -52,6 +53,7 @@ public function store(Request $request)
             'agent_1_id' => 'required|exists:agents,id',
             'agent_2_id' => 'required|exists:agents,id',
             'site_id' => 'nullable|exists:sites,id',
+            'demande_id' => 'nullable|exists:demandes,id',
         ]);
 
         $generator = new VacationCodeGenerator();
@@ -88,6 +90,7 @@ public function store(Request $request)
             'agent_1_id' => $validated['agent_1_id'],
             'agent_2_id' => $validated['agent_2_id'],
             'site_id' => $validated['site_id'],
+            'demande_id' => $validated['demande_id'],
         ]);
 
         return redirect()->route('admin.vacations.index')->with('success', 'Vacation créée avec succès !');
@@ -110,6 +113,7 @@ public function store(Request $request)
     $agents = Agent::all();
     // Récupération de tous les sites
     $sites = Site::all();
+    $demandes = Demande::all();
     // Récupération des agents déjà affectés
     $agentsDejaAffectes = Vacation::where('status', 'en_cours')
         ->orWhere('status', 'affecte')  
@@ -121,7 +125,7 @@ public function store(Request $request)
     // Liste des agents disponibles (ceux qui ne sont pas dans $agentsDejaAffectes)
     $agentsDisponibles = Agent::whereNotIn('id', $agentsDejaAffectes)->get();
 
-    return view('admin.vacations.edit', compact('vacation', 'agents', 'agentsDisponibles', 'sites'));
+    return view('admin.vacations.edit', compact('vacation', 'agents', 'agentsDisponibles', 'sites', 'demandes'));
 }
     
     public function update(Request $request, $id)

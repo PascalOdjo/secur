@@ -95,6 +95,16 @@
                                         @endif
                                     </select>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="site_id">Site</label>
+                                    <select name="site_id" id="site_id" class="form-control" required>
+                                        <option value="" disabled {{ old('site_id') == '' ? 'selected' : '' }}>Choisir...</option>
+                                        @foreach ($sites as $site)
+                                            <option value="{{ $site->id }}" {{ $vacation->site_id == $site->id ? 'selected' : '' }}>{{ $site->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                         
                                 <div class="form-group">
                                     <label for="status">Statut</label>

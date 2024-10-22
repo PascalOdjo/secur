@@ -69,12 +69,22 @@ class ClientController extends Controller
         $client->entreprise = $request->entreprise;
         $client->site_id = $site->id;
 
+        
+       
         // gestion du telechrgement de l'image
         if($request->hasFile('passport_photo')){
             $path = $request->file('passport_photo')->store('public/documents');
             $client->passport_photo = $path;  // enregistrement dans la base de donnée
         }
         $client->save();
+
+        // Stocker une information dans la session
+        session(['client_inscrit' => true]);
+        // Créer une section pour stocker l'etat inscrit du client
+        if(session('client_inscrit')) {
+            // Si le client s'inscrit, afficher un menu request
+            return view('request');
+        }
         return redirect()->route('admin.clients.index')->with('succes', ' !');
     }
 
