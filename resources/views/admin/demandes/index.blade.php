@@ -32,6 +32,11 @@
                 <div class="card m-b-30">
                     <div class="card-header">
                         @include('_message')
+                        @if (session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
                         <h5 class="card-title">Liste des demandes</h5>
                     </div>
                     <div class="card-body">

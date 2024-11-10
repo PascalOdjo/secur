@@ -29,18 +29,20 @@
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="contact-box">
                         <ul>
-                            <li>First Floor,Vincent Plaza, Kuzhithurai,Marthandam, Kanyakumari Dist
-                                Tamilnadu, India - 629163</li>
-                            <li>sales@smarteyeapps.com</li>
-                            <li>+91 9751791203</li>
+                            <li>Agence de Sécurité Security Guards size à Novissi non loin de la station MRS
+                                Novissi, Lomé - Togo</li>
+                            <li>+228 90 00 00 01</li>
+                            <li>securityguards@gmail.com</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="contact-box">
-                        <form action="{{route('admin.clients.store')}}" method="POST" class="my-form">
+                        <form action="{{route('contact.submit')}}" method="POST" class="my-form">
                             @csrf
+
+                            @include('_message')
                             <div class="form-group">
                                 <input type="name" name="nom" class="form-control" placeholder="Nom">
                             </div>
@@ -63,6 +65,14 @@
 
                             <div class="form-group">
                                 <input class="form-control" name="entreprise" placeholder="Entreprise"></input>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control" name="nombre_agents" placeholder="Nombre d'agents"></input>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="description" class="form-control" placeholder="Entrer votre message"></textarea>
                             </div>
 
                             <div class="form-group">

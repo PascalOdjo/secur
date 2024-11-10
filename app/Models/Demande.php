@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Demande extends Model
 {
-    protected $fillable = ['client_id', 'site_id', 'description', 'nombre_contrats', 'type_vacation', 'status'];
+    protected $fillable = ['client_id', 'site_id', 'description', 'nombre_agents', 'type_vacation', 'status'];
+
+    // Valeur âr defaut pour le champ type_vacation
+    protected $attributes = ['type_vacation' => 'sys_12'];
 
     public function client()
     {

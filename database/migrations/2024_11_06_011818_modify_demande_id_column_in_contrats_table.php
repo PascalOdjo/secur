@@ -9,21 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::table('clients', function (Blueprint $table) {
-        if (!Schema::hasColumn('clients', 'site_id')) {
-            $table->unsignedBigInteger('site_id')->nullable();
-        }
-    });
-}
+    public function up(): void
+    {
+        Schema::table('contrats', function (Blueprint $table) {
+            $table->unsignedBigInteger('demande_id')->nullable()->change();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('clients', function (Blueprint $table) {
+        Schema::table('contrats', function (Blueprint $table) {
             //
         });
     }

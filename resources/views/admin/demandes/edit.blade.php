@@ -81,15 +81,18 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="type_contrat">Type de contrat</label>
-                                    <input type="text" id="type_contrat" name="type_contrat" class="form-control" value="{{ old('type_contrat', $demande->type_contrat) }}" required>
+                                    <label for="type_vacation">Type de Vacation :</label>
+                                    <select id="type_vacation" name="type_vacation" class="form-control" required>
+                                        <option value="sys_12">Système 12</option>
+                                        <option value="sys_08">Système 08</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="nombre_contrats">Nombre de contrats</label>
-                                    <input type="number" id="nombre_contrats" name="nombre_contrats" class="form-control" value="{{ old('nombre_contrats', $demande->nombre_contrats) }}" required min="1">
+                                    <label for="nombre_agents">Nombre de agents</label>
+                                    <input type="number" id="nombre_agents" name="nombre_agents" class="form-control" value="{{ old('nombre_agents', $demande->nombre_agents) }}" required min="1">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="description">Description</label>

@@ -53,3 +53,13 @@
         <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none'"><i class="ri-close-fill"></i></button>
     </div>
 @endif
+
+@if (session('message') == 'Demande validée avec succès')
+    <div class="alert alert-success">
+        Demande validée !
+    </div>
+@elseif (session('message') == 'Demande non validée')
+    <div class="alert alert-warning">
+        Demande non validée !
+    </div>
+@endif

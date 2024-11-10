@@ -15,6 +15,7 @@ use App\Http\Controllers\PointageController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ContactController;
 
 
 Route::view('/', 'home')->name('home');
@@ -23,6 +24,12 @@ Route::view('/about-us', 'about-us')->name('about-us');
 Route::view('/contact-us', 'contact-us')->name('contact-us');
 Route::view('/services', 'services')->name('services');
 Route::view('/requete', 'requete')->name('requete');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+Route::post('/admin/demandes/{id}/traiter', [DemandeController::class, 'traiterDemande'])->name('admin.demandes.traiterDemande');
+Route::get('/admin/demandes/{contratId}/traiter', [DemandeController::class, 'afficherTraitement'])->name('admin.demandes.traiter');
+
+
+
 
 // Utilisez Auth::routes() au lieu de définir manuellement les routes d'authentification
 Auth::routes();
@@ -34,6 +41,7 @@ Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestF
 Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 
 // Routes protégées
 Route::middleware(['auth'])->group(function() {

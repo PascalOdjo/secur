@@ -15,7 +15,7 @@ class InvoiceController extends Controller
         return view('admin.invoices.index', compact('invoices'));
     }
     public function store(Request $request)
-{
+    {
     // Validation des champs
     $request->validate([
         'demande_id' => 'required|exists:demandes,id',

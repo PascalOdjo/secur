@@ -9,21 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::table('clients', function (Blueprint $table) {
-        if (!Schema::hasColumn('clients', 'site_id')) {
-            $table->unsignedBigInteger('site_id')->nullable();
-        }
-    });
-}
+    public function up(): void
+    {
+        Schema::table('demandes', function (Blueprint $table) {
+            $table->dropColumn(['type_contrat', 'valeur_exploitation', 'valeur_tresorerie', 'status_contrat']);
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('clients', function (Blueprint $table) {
+        Schema::table('demandes', function (Blueprint $table) {
             //
         });
     }

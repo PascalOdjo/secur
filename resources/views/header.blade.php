@@ -21,7 +21,7 @@
                                 <div class="contact-info">
                                     <ul class="d-flex justify-content-between">
                                         <li><i class="fas fa-phone"></i> +228 96 10 94 66 </li>
-                                        <li><i class="fas fa-envelope"></i> odjpaw@gmail.com</li>
+                                        <li><i class="fas fa-envelope"></i> securityguards@gmail.com</li>
                                     </ul>
                                 </div>
                             </div>
