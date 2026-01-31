@@ -16,6 +16,7 @@ class Client extends Model
         'telephone',
         'adresse',
         'entreprise',
+        'passport_photo',
     ];
 
     public function site()

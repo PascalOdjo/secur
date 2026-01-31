@@ -14,17 +14,15 @@ return new class extends Migration
         Schema::create('vacations', function (Blueprint $table) {
             $table->id();
             $table->string('code_vacation')->unique();
-            $table->enum('type_vacation',['sys_08','sys_06']);
-            $table->enum('shift',['jour', 'nuit','journee_entiere','evenementiel']);
+            $table->enum('type_vacation', ['sys_08', 'sys_12', 'sys_06']);
+            $table->enum('shift', ['jour', 'nuit', 'journee_entiere', 'evenementiel']);
             $table->unsignedBigInteger('agent_1_id')->nullable(); // Premier agent assigné
             $table->unsignedBigInteger('agent_2_id')->nullable(); // Second agent assigné
             $table->dateTime('start_time'); // Heure de début 
             $table->dateTime('end_time'); // Heure de fin
-            $table->enum('status', ['cree', 'en_cours', 'affecte','termine']);
-            $table->timestamps(); 
-
-            // Foreign ids
-            $table->foreignId('site_id')->constrained('sites')->onDelete('cascade');
+            $table->enum('status', ['cree', 'en_cours', 'affecte', 'termine']);
+            $table->timestamps();
+            $table->unsignedBigInteger('site_id');
 
             // Foreign Keys
             $table->foreign('agent_1_id')->references('id')->on('agents')->onDelete('set null');

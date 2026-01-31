@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('vacations', function (Blueprint $table) {
-            //
-            $table->unsignedBigInteger('site_id')->nullable();
-            $table->foreign('site_id')->references('id')->on('sites')->onDelete('set null');
+            $table->enum('vacation_type', ['reel', 'virtuel'])->default('reel')->after('type_vacation')->comment('Réel ou virtuel');
         });
     }
 
@@ -24,10 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('vacations', function (Blueprint $table) {
-            // Supprimer la colonne
-            Schema::table('vacations', function (Blueprint $table) {
-                $table->dropColumn('site_id'); // Supprimez la colonne si la migration est annulée
-            });
+            $table->dropColumn('vacation_type');
         });
     }
 };

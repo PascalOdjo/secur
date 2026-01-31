@@ -9,13 +9,15 @@ class site extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'address', 'client_id'];
+    protected $fillable = ['name', 'address', 'site_code', 'site_type', 'description', 'entreprise', 'client_id'];
 
-    public function vacation(){
+    public function vacation()
+    {
         return $this->hasMany(Vacation::class);
     }
 
-    public function client(){
+    public function client()
+    {
         return $this->belongsTo(Client::class);
     }
 

@@ -7,8 +7,10 @@ use App\Models\Client;
 use App\Models\Site;
 use App\Models\Demande;
 use App\Models\Vacation;
+use App\Models\Invoice;
 use App\Models\Contrat;
 use App\Services\VacationCodeGenerator;
+use App\Services\ContractCalculationService;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\JsonResponse;
@@ -29,68 +31,112 @@ class DemandeController extends Controller
     // Enregistrer la demande
     public function store(Request $request)
     {
-    // Validation des données du formulaire
-    $request->validate([
-        'client_id' => 'required|exists:clients,id',
-        'site_id' => 'required|exists:sites,id',
-        'status' => 'required|in:en_cours,affecte,termine,annule',
-        'type_vacation' => 'required|in:sys_12,sys_08',
-        'nombre_agents' => 'required|integer|min:1',
-        'description' => 'nullable|string',
-        // 'agent_1_id' => 'required|exists:agents,id', // Validation de l'agent de jour
-        // 'agent_2_id' => 'required|exists:agents,id', // Validation de l'agent de nuit
-    ]);
+        // Validation des données du formulaire
+        $request->validate([
+            'client_nom' => 'required|string|max:255',
+            'client_prenom' => 'nullable|string|max:255',
+            'client_email' => 'required|email|max:255',
+            'client_telephone' => 'nullable|string|max:20',
+            'client_adresse' => 'nullable|string|max:255',
+            'client_passport_photo' => 'nullable|image|max:5120', // 5MB max
+            'site_name' => 'required|string|max:255',
+            'site_code' => 'required|string|max:255',
+            'site_address' => 'nullable|string|max:255',
+            'site_type' => 'required|in:LION,LIONNE',
+            'status' => 'required|in:en_cours,affecte,termine,annule',
+            'type_vacation' => 'required|in:sys_12,sys_08,sys_06',
+            'nombre_agents' => 'required|integer|min:1',
+            'montant' => 'required|numeric|min:0',
+            'start_date' => 'required|date|date_format:Y-m-d',
+            'end_date' => 'required|date|date_format:Y-m-d|after:start_date',
+            'description' => 'nullable|string',
+        ]);
 
-                        
+        // Gérer l'upload de la photo passport
+        $passportPhotoPath = null;
+        if ($request->hasFile('client_passport_photo') && $request->file('client_passport_photo')->isValid()) {
+            try {
+                $file = $request->file('client_passport_photo');
+                $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('documents'), $fileName);
+                $passportPhotoPath = 'documents/' . $fileName;
+            } catch (\Exception $e) {
+                // Si l'upload échoue, continuer sans photo
+                \Illuminate\Support\Facades\Log::error('Error uploading passport photo: ' . $e->getMessage());
+            }
+        }
 
-    // Création de la demande dans la base de données
-    $client = Client::findOrFail($request->client_id);
-    $demande = new Demande([
-        'client_id' => $request->client_id,
-        'site_id' => $request->site_id,
-        'status' => $request->status,
-        'type_vacation' => $request->type_vacation,
-        'nombre_agents' => $request->nombre_contrats,
-        'description' => $request->description,
-    ]);
+        // Créer ou récupérer le client par nom et email
+        $client = Client::firstOrCreate(
+            ['nom' => $request->client_nom, 'email' => $request->client_email],
+            [
+                'prenom' => $request->client_prenom ?? '',
+                'telephone' => $request->client_telephone,
+                'adresse' => $request->client_adresse,
+                'passport_photo' => $passportPhotoPath,
+            ]
+        );
 
-    // Sauvegarde de la demande
-    $demande->save();
+        // Créer ou récupérer le site par nom
+        $site = Site::firstOrCreate(
+            ['name' => $request->site_name],
+            [
+                'address' => $request->site_address,
+                'site_code' => $request->site_code,
+                'site_type' => $request->site_type,
+                'client_id' => $client->id,
+            ]
+        );
 
-    
-    // Instanciation du générateur de codes de vacations
-    $generator = new VacationCodeGenerator();
+        // Création de la demande dans la base de données
+        $demande = new Demande([
+            'client_id' => $client->id,
+            'site_id' => $site->id,
+            'status' => $request->status,
+            'type_vacation' => $request->type_vacation,
+            'nombre_agents' => $request->nombre_agents,
+            'montant' => $request->montant,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'description' => $request->description,
+        ]);
 
-    // Création des vacations en fonction du nombre de contrats
-    for ($i = 1; $i <= $request->nombre_contrats; $i++) {
-        // Création d'une nouvelle vacation
-        $vacation = new Vacation();
-        $vacation->demande_id = $demande->id; // Association à la demande
-        $vacation->site_id = $request->site_id; // Affectation au site
-        $vacation->shift_jour_start_time = '06:00';
-        $vacation->shift_jour_end_time = '18:00';
-        $vacation->shift_nuit_start_time = '18:01';
-        $vacation->shift_nuit_end_time = '06:00';
-        $vacation->status = 'affecte'; // Par défaut, une vacation est affectée
+        // Sauvegarde de la demande
+        $demande->save();
 
-        // Déterminer si c'est une vacation de nuit ou de jour
-        $isNight = ($vacation->shift_jour_start_time > $vacation->shift_nuit_start_time); // Exemple de logique
-        $isFullDay = false; // Changez cette logique si nécessaire
+        // Calculer les montants selon le nouveau système
+        $calculationService = new ContractCalculationService();
+        $amounts = $calculationService->calculateContractAmounts(
+            $request->nombre_agents,
+            $request->start_date,
+            $request->end_date
+        );
 
-        // Génération des codes de vacation
-        $vacationCodes = $generator->generateVacationCodes($demande->id, $isNight, $isFullDay);
-        $vacation->code_vacation = implode('  ', $vacationCodes); // Combine les codes générés
+        // Mettre à jour les montants calculés
+        $demande->update([
+            'valeur_contrat' => $amounts['valeur_contrat'],
+            'montant_brut' => $amounts['montant_brut'],
+            'montant_exploitation' => $amounts['montant_exploitation'],
+            'montant_tresorerie' => $amounts['montant_tresorerie'],
+            'status_validation' => $amounts['status_validation'],
+        ]);
 
-        $vacation->save();
+        // Créer automatiquement une facture pour la demande
+        $invoice = new Invoice();
+        $invoice->demande_id = $demande->id;
+        $invoice->total_amount = $amounts['montant_exploitation']; // Utiliser montant_exploitation
+        $invoice->agent_payment = 0; // Sera calculé avec les paiements quotidiens
+        $invoice->agency_payment = 0; // À définir selon votre politique
+        $invoice->status = 'pending'; // La facture est en attente jusqu'à la fin du contrat
+        $invoice->save();
 
-        // Affectation des agents pour chaque vacation
-        // $vacation->agent_1_id = $request->input('agent_1_id'); // Agent de jour
-        // $vacation->agent_2_id = $request->input('agent_2_id'); // Agent de nuit
-        // $vacation->save();
-    }
+        // Créer les vacations automatiquement (4 réels + 12 virtuels par agent)
+        if ($amounts['status_validation'] === 'validé') {
+            $calculationService->createVacationsForDemande($demande);
+        }
 
-    // Redirection après la création de toutes les vacations
-    return redirect()->route('admin.demandes.index')->with('success', 'Demande et vacations créées avec succès.');
+        // Redirection après la création
+        return redirect()->route('admin.demandes.index')->with('success', 'Demande créée avec succès.' . ($amounts['status_validation'] === 'en_attente' ? ' (En attente de validation)' : ' (Validée - Vacations créées)'));
     }
 
 
@@ -111,9 +157,61 @@ class DemandeController extends Controller
     public function update(Request $request, $id)
     {
         $demande = Demande::findOrFail($id);
-        $demande->update($request->all());
-        return redirect()->route('admin.demandes.index')->with('success', 'Demande modifié avec succès.');
-    }   
+
+        // Valider les données
+        $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'site_id' => 'required|exists:sites,id',
+            'nombre_agents' => 'required|integer|min:1',
+            'montant' => 'required|numeric|min:0',
+            'start_date' => 'required|date|date_format:Y-m-d',
+            'end_date' => 'required|date|date_format:Y-m-d|after:start_date',
+        ]);
+
+        // Mettre à jour les champs de base
+        $demande->update($request->only([
+            'client_id',
+            'site_id',
+            'status',
+            'type_vacation',
+            'nombre_agents',
+            'montant',
+            'start_date',
+            'end_date',
+            'description',
+        ]));
+
+        // Recalculer les montants selon le nouveau système
+        $calculationService = new ContractCalculationService();
+        $amounts = $calculationService->calculateContractAmounts(
+            $request->nombre_agents,
+            $request->start_date,
+            $request->end_date
+        );
+
+        // Mettre à jour les montants calculés
+        $demande->update([
+            'valeur_contrat' => $amounts['valeur_contrat'],
+            'montant_brut' => $amounts['montant_brut'],
+            'montant_exploitation' => $amounts['montant_exploitation'],
+            'montant_tresorerie' => $amounts['montant_tresorerie'],
+            'status_validation' => $amounts['status_validation'],
+        ]);
+
+        // Mettre à jour la facture
+        if ($demande->invoice) {
+            $demande->invoice->update([
+                'total_amount' => $amounts['montant_exploitation'],
+            ]);
+        }
+
+        // Recréer les vacations si validé
+        if ($amounts['status_validation'] === 'validé') {
+            $calculationService->createVacationsForDemande($demande);
+        }
+
+        return redirect()->route('admin.demandes.index')->with('success', 'Demande modifiée avec succès.');
+    }
 
     public function destroy($id)
     {
@@ -135,26 +233,26 @@ class DemandeController extends Controller
     {
         // Récupération de la demande à partir de l'ID
         $demande = Demande::find($demandeId);
-    
+
         if (!$demande) {
             return redirect()->back()->with('error', 'Demande non trouvée.');
         }
-    
+
         // Récupération du nombre d'agents demandés
         $nombreAgentsDemandes = $demande->nombre_agents;
-    
+
         // Définition des valeurs de calcul par agent
         $valeurParAgentExploitation = 32;
         $valeurParAgentTresorerie = 96;
-    
+
         // Calculer les valeurs totales pour l'exploitation et la trésorerie
         $valeurExploitation = $nombreAgentsDemandes * $valeurParAgentExploitation;
         $valeurTresorerie = $nombreAgentsDemandes * $valeurParAgentTresorerie;
-    
+
         // Initialiser les variables de type de contrat et de validation
         $typeContrat = null;
         $valide = false;
-    
+
         // Vérification des critères pour un demi-contrat (2 agents)
         if ($nombreAgentsDemandes == 2) {
             if ($valeurExploitation >= 64 && $valeurTresorerie >= 192) {
@@ -169,7 +267,7 @@ class DemandeController extends Controller
                 $valide = true;
             }
         }
-    
+
         // Si la demande est valide, créer et enregistrer le contrat
         if ($valide) {
             try {
@@ -185,30 +283,25 @@ class DemandeController extends Controller
             } catch (\Exception $e) {
                 return redirect()->back()->with('error', 'Erreur lors de la création du contrat : ' . $e->getMessage());
             }
-    
+
             // Mettre à jour le statut de la demande
             $demande->status = 'affecte';
             $demande->save();
         } else {
             return redirect()->back()->with('error', 'Les critères pour valider cette demande ne sont pas remplis.');
         }
-    
+
         // Rediriger vers la vue `traiter` avec un message de succès et le nombre de contrats générés
         return redirect()->route('admin.demandes.traiter', ['contratId' => $contrat->id])->with([
             'message' => 'La demande a été validée avec succès !',
             'nombreContrats' => $nombreAgentsDemandes / 2, // Nombre de contrats générés
         ]);
     }
-    
+
     // Afficher la vue `traiter`
     public function afficherTraitement($contratId)
     {
         $contrat = Contrat::findOrFail($contratId);
         return view('admin.demandes.traiter', compact('contrat'));
     }
-
-    
-    
-
-    
 }

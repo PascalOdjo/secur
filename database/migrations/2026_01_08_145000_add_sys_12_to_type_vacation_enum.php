@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('vacations', function (Blueprint $table) {
-            //
-            // Supprimer la contrainte de clé étrangère
-            $table->dropForeign('vacations_site_id_foreign');
-            // Supprimer la colonne
-            $table->dropColumn('site_id');
+            $table->enum('type_vacation', ['sys_08', 'sys_12', 'sys_06'])->change();
         });
     }
 
@@ -26,11 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('vacations', function (Blueprint $table) {
-            //
-            // Restaurer la colonne site_id
-            $table->unsignedBigInteger('site_id')->nullable();
-            // Restaurer la contrainte de clé étrangère
-            $table->foreign('site_id')->references('id')->on('sites')->onDelete('set null');
+            $table->enum('type_vacation', ['sys_08', 'sys_06'])->change();
         });
     }
 };

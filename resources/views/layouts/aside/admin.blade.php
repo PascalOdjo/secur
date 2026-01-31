@@ -33,17 +33,18 @@
         <a href="javaScript:void();">
             <i class="ri-stack-line"></i><span>Vacations</span><i class="ri-arrow-right-s-line"></i>
         </a>
-        <ul class="vertical-submenu">                                
-            <li><a href="{{route('admin.vacations.create')}}">Créer une Vacation</a></li>  
+        <ul class="vertical-submenu">
+            <li><a href="{{route('admin.vacations.create')}}">Créer une Vacation</a></li>
             <li><a href="{{route('admin.vacations.index')}}">Liste des Vacations</a></li>
+            <li><a href="{{route('vacations-list.index')}}">Vacations par Demande</a></li>
         </ul>
     </li>
     <li>
         <a href="javaScript:void();">
             <i class="ri-compass-3-line"></i><span>Sites</span><i class="ri-arrow-right-s-line"></i>
         </a>
-        <ul class="vertical-submenu">                                
-            <li><a href="{{route('admin.sites.create')}}">Créer un Site</a></li>  
+        <ul class="vertical-submenu">
+            <li><a href="{{route('admin.sites.create')}}">Créer un Site</a></li>
             <li><a href="{{route('admin.sites.index')}}">Liste des Sites</a></li>
         </ul>
     </li>
@@ -53,8 +54,8 @@
 
 "></i><span>Gestion des Clients</span><i class="ri-arrow-right-s-line"></i>
         </a>
-        <ul class="vertical-submenu">                                
-            <li><a href="{{route('admin.clients.create')}}">Ajouter un Client</a></li>  
+        <ul class="vertical-submenu">
+            <li><a href="{{route('admin.clients.create')}}">Ajouter un Client</a></li>
             <li><a href="{{route('admin.clients.index')}}">Liste des Clients</a></li>
         </ul>
     </li>
@@ -62,14 +63,14 @@
         <a href="{{ route('admin.pointages.index') }}">
             <i class="ri-bubble-chart-line"></i><span>Pointages</span><span class="badge badge-success float-right">New</span>
         </a>
-    </li>  
+    </li>
     <li>
         <a href="javaScript:void();">
-          <i class="ri-apps-line"></i><span>Messages</span><i class="ri-arrow-right-s-line"></i>
+            <i class="ri-apps-line"></i><span>Messages</span><i class="ri-arrow-right-s-line"></i>
         </a>
         <ul class="vertical-submenu">
             <li><a href="apps-calender.html">Agents</a></li>
-            <li><a href="apps-chat.html">Clients</a></li> 
+            <li><a href="apps-chat.html">Clients</a></li>
             <li>
                 <a href="javaScript:void();">Notifications<i class="ri-arrow-right-s-line"></i></a>
                 <ul class="vertical-submenu">
@@ -78,20 +79,18 @@
                     <li><a href="apps-email-compose.html">Administration</a></li>
                 </ul>
             </li>
-            
+
         </ul>
     </li>
     <li>
         <a href="javaScript:void();">
-          <i class="ri-todo-line"></i><span>Facturations</span><i class="ri-arrow-right-s-line"></i>
+            <i class="ri-todo-line"></i><span>Facturations</span><i class="ri-arrow-right-s-line"></i>
         </a>
         <ul class="vertical-submenu">
-            <li><a href="{{route('admin.invoices.create')}}">Clients</a></li> 
-            <li><a href="{{route('admin.invoices.create')}}">Agents</a></li>
-            
-            
+            <li><a href="{{ route('admin.invoices.index') }}">Clients</a></li>
+            <li><a href="{{ route('admin.agent-payments.dashboard') }}">Agents</a></li>
         </ul>
     </li>
-    
-                                            
+
+
 </ul>

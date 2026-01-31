@@ -17,11 +17,19 @@ class Invoice extends Model
         'status',
         'vacation_id'
     ];
-    public function vacation(){
+
+    public function demande()
+    {
+        return $this->belongsTo(Demande::class);
+    }
+
+    public function vacation()
+    {
         return $this->belongsTo(Vacation::class);
     }
 
-    public function agents(){
+    public function agents()
+    {
         return $this->hasMany(Agent::class);
     }
 }

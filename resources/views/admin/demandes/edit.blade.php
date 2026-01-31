@@ -17,7 +17,7 @@
             <div class="col-md-4 col-lg-4">
                 <div class="widgetbar">
                     <a href="{{ route('admin.demandes.index') }}" class="btn btn-primary"><i class="ri-arrow-left-line mr-2"></i> Retour</a>
-                </div>                        
+                </div>
             </div>
         </div>
     </div>
@@ -36,14 +36,32 @@
 
                             <!-- Gestion des erreurs -->
                             @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
                             @endif
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="montant">Montant (FCFA)</label>
+                                    <input type="number" id="montant" name="montant" class="form-control" value="{{ old('montant', $demande->montant) }}" required step="0.01" min="0">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="start_date">Date de début</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ old('start_date', $demande->start_date) }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="end_date">Date de fin</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ old('end_date', $demande->end_date) }}" required>
+                                </div>
+                            </div>
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
@@ -51,9 +69,9 @@
                                     <select id="client_id" name="client_id" class="form-control" required>
                                         <option value="">Sélectionner un client</option>
                                         @foreach ($clients as $client)
-                                            <option value="{{ $client->id }}" {{ $client->id == $demande->client_id ? 'selected' : '' }}>
-                                                {{ $client->nom }} {{ $client->prenom }}
-                                            </option>
+                                        <option value="{{ $client->id }}" {{ $client->id == $demande->client_id ? 'selected' : '' }}>
+                                            {{ $client->nom }} {{ $client->prenom }}
+                                        </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -62,9 +80,9 @@
                                     <select id="site_id" name="site_id" class="form-control" required>
                                         <option value="">Sélectionner un site</option>
                                         @foreach ($sites as $site)
-                                            <option value="{{ $site->id }}" {{ $site->id == $demande->site_id ? 'selected' : '' }}>
-                                                {{ $site->name }}
-                                            </option>
+                                        <option value="{{ $site->id }}" {{ $site->id == $demande->site_id ? 'selected' : '' }}>
+                                            {{ $site->name }}
+                                        </option>
                                         @endforeach
                                     </select>
                                 </div>

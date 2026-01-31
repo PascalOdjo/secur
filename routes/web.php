@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -11,10 +12,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\VacationController;
+use App\Http\Controllers\VacationListController;
 use App\Http\Controllers\PointageController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\AgentPaymentController;
 use App\Http\Controllers\ContactController;
 
 
@@ -44,12 +47,12 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 
 
 // Routes protégées
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/contact-us', [ContactController::class, 'index'])->name('contact-us');
     Route::post('/admin/demandes.store', [DemandeController::class, 'store'])->name('admin.demandes.store');
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::prefix('admin')->name('admin.')->group(function() {
+    Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('agents', AgentController::class);
         Route::resource('vacations', VacationController::class);
         Route::resource('sites', SiteController::class);
@@ -57,19 +60,27 @@ Route::middleware(['auth'])->group(function() {
         Route::resource('clients', ClientController::class);
         Route::resource('demandes', DemandeController::class);
         Route::resource('invoices', InvoiceController::class);
-        Route::post('invoices/{id}/pay', [InvoiceController::class, 'pay'])->name('admin.invoices.pay');
-        Route::post('invoices/{id}/processPayment', [InvoiceController::class, 'processPayment'])->name('admin.invoices.processPayment');
+        Route::post('invoices/{id}/pay', [InvoiceController::class, 'pay'])->name('invoices.pay');
+        Route::post('invoices/{id}/processPayment', [InvoiceController::class, 'processPayment'])->name('invoices.processPayment');
+
+        // Routes pour les gains des agents
+        Route::get('agent-payments/dashboard', [AgentPaymentController::class, 'dashboard'])->name('agent-payments.dashboard');
+        Route::get('agent-payments/summary', [AgentPaymentController::class, 'summary'])->name('agent-payments.summary');
+        Route::get('agent-payments/{agentId}', [AgentPaymentController::class, 'show'])->name('agent-payments.show');
+        Route::post('agent-payments/{agentId}/withdraw', [AgentPaymentController::class, 'requestWithdrawal'])->name('agent-payments.withdraw');
     });
 
+    // Routes pour afficher les vacations réelles et virtuelles
+    Route::get('/admin/vacations-list', [VacationListController::class, 'index'])->name('vacations-list.index');
+    Route::get('/admin/vacations-list/{demandeId}', [VacationListController::class, 'show'])->name('vacations-list.show');
+
     // Routes pour les agents
-    Route::middleware(['auth', 'checkRole:agent'])->group(function() {
+    Route::middleware(['auth', 'checkRole:agent'])->group(function () {
         Route::get('/agent/dashboard', [DashboardController::class, 'agentDashboard'])->name('agent.dashboard');
     });
 
     // Routes pour les clients
-    Route::middleware(['auth', 'checkRole:client'])->group(function() {
+    Route::middleware(['auth', 'checkRole:client'])->group(function () {
         Route::get('/client/dashboard', [DashboardController::class, 'clientDashboard'])->name('client.dashboard');
     });
-
 });
-

@@ -17,11 +17,11 @@ class ClientController extends Controller
         // Rechercher les clients selon le nom, prénom, etc.
         $clients = Client::when($search, function ($query) use ($search) {
             $query->where('nom', 'like', '%' . $search . '%')
-                  ->orWhere('prenom', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%')
-                  ->orWhere('telephone', 'like', '%' . $search . '%')
-                  ->orWhere('adresse', 'like', '%' . $search . '%')
-                  ->orWhere('entreprise', 'like', '%' . $search . '%');
+                ->orWhere('prenom', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%')
+                ->orWhere('telephone', 'like', '%' . $search . '%')
+                ->orWhere('adresse', 'like', '%' . $search . '%')
+                ->orWhere('entreprise', 'like', '%' . $search . '%');
         })->get();
 
         // Vérifiez si des clients ont été trouvés
@@ -51,13 +51,13 @@ class ClientController extends Controller
         ]);
 
         // Enregistrer le site
-        try{
+        try {
             $site = Site::create([
-                'name' =>$request->entreprise,
-                'address' =>$request->adresse,
+                'name' => $request->entreprise,
+                'address' => $request->adresse,
             ]);
-        }catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Erreur lors de la création du Site :' .$e->getMessage());
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erreur lors de la création du Site :' . $e->getMessage());
         }
 
         $client = new Client();
@@ -69,10 +69,10 @@ class ClientController extends Controller
         $client->entreprise = $request->entreprise;
         $client->site_id = $site->id;
 
-        
-       
+
+
         // gestion du telechrgement de l'image
-        if($request->hasFile('passport_photo')){
+        if ($request->hasFile('passport_photo')) {
             $path = $request->file('passport_photo')->store('public/documents');
             $client->passport_photo = $path;  // enregistrement dans la base de donnée
         }
@@ -81,7 +81,7 @@ class ClientController extends Controller
         // Stocker une information dans la session
         session(['client_inscrit' => true]);
         // Créer une section pour stocker l'etat inscrit du client
-        if(session('client_inscrit')) {
+        if (session('client_inscrit')) {
             // Si le client s'inscrit, afficher un menu request
             return view('request');
         }
@@ -103,15 +103,16 @@ class ClientController extends Controller
         $clients->telephone = $request->telephone;
         $clients->adresse = $request->adresse;
         $clients->entreprise = $request->entreprise;
-        if($request->hasFile('passport_photo')){
+        if ($request->hasFile('passport_photo')) {
             $path = $request->file('passport_photo')->store('public/documents');
             $clients->passport_photo = $path;  // enregistrement dans la base de donnée
         }
         $clients->save();
         return redirect()->route('admin.clients.index')->with('success', 'Informations modifiées avec succès !');
     }
-    public function show($id){
-        $clients = Client::findOrFail($id);
+    public function show($id)
+    {
+        $clients = Client::with('site')->findOrFail($id);
         return view('admin.clients.show', compact('clients'));
     }
 

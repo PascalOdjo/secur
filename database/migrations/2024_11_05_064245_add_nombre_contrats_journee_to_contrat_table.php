@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('contrat', function (Blueprint $table) {
+        Schema::table('contrats', function (Blueprint $table) {
             $table->integer('nombre_contrats_journee_entiere')->nullable();
             $table->integer('nombre_contrats_demi_journee')->nullable();
         });
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('contrat', function (Blueprint $table) {
+        Schema::table('contrats', function (Blueprint $table) {
             $table->dropColumn(['nombre_contrats_journee_entiere', 'nombre_contrats_demi_journee']);
         });
     }

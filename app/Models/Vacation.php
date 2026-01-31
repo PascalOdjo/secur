@@ -12,27 +12,45 @@ class Vacation extends Model
     protected $fillable = [
         'code_vacation',
         'type_vacation',
+        'vacation_type',
         'shift',
+        'agent_id_1',
+        'agent_id_2',
         'agent_1_id',
         'agent_2_id',
         'start_time',
         'end_time',
         'status',
         'site_id',
+        'demande_id',
     ];
 
-    public function agent1(){
+    public function agent1()
+    {
         return $this->belongsTo(Agent::class, 'agent_1_id');
     }
-    public function agent2(){
+    public function agent2()
+    {
         return $this->belongsTo(Agent::class, 'agent_2_id');
     }
 
-    public function site(){
+    public function site()
+    {
         return $this->belongsTo(Site::class);
     }
 
-    public function invoice(){
+    public function invoice()
+    {
         return $this->hasOne(Invoice::class);
+    }
+
+    public function demande()
+    {
+        return $this->belongsTo(Demande::class);
+    }
+
+    public function agentPayments()
+    {
+        return $this->hasMany(AgentPayment::class);
     }
 }

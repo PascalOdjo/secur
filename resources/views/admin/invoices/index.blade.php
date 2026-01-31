@@ -16,7 +16,7 @@
             <div class="col-md-4 col-lg-4">
                 <div class="widgetbar">
                     <a href="{{ route('admin.invoices.create') }}" class="btn btn-primary"><i class="ri-add-line mr-2"></i> Créer une nouvelle facture</a>
-                </div>                        
+                </div>
             </div>
         </div>
     </div>
@@ -31,9 +31,21 @@
                     <div class="card-body">
                         <!-- Messages de succès -->
                         @if(session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                        @endif
+
+                        <!-- Paiements agents en attente -->
+                        @if(isset($agentPayments) && $agentPayments->isNotEmpty())
+                        <div class="mb-3">
+                            <h5>Paiements agents en attente</h5>
+                            <ul>
+                                @foreach($agentPayments as $ap)
+                                <li>{{ $ap->agent ? $ap->agent->nom ?? $ap->agent->prenom ?? 'Agent #'.$ap->agent_id : 'Agent #' . $ap->agent_id }} : {{ number_format($ap->total, 2) }} Francs CFA</li>
+                                @endforeach
+                            </ul>
+                        </div>
                         @endif
 
                         <!-- Tableau des factures -->
@@ -52,31 +64,31 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($invoices as $invoice)
-                                        <tr>
-                                            <td>{{ $invoice->id }}</td>
-                                            <td>{{ $invoice->vacation_id }}</td>
-                                            <td>{{ number_format($invoice->total_amount, 2) }} Francs CFA</td>
-                                            <td>{{ number_format($invoice->agent_payment, 2) }} Francs CFA</td>
-                                            <td>{{ number_format($invoice->agency_payment, 2) }} Francs CFA</td>
-                                            <td>
-                                                <span class="badge badge-{{ $invoice->status == 'paid' ? 'success' : 'warning' }}">
-                                                    {{ ucfirst($invoice->status) }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('admin.invoices.show', $invoice->id) }}" class="btn btn-info btn-sm"><i class="ri-eye-line"></i></a>
-                                                <a href="{{ route('admin.invoices.edit', $invoice->id) }}" class="btn btn-warning btn-sm"><i class="ri-edit-line"></i></a>
-                                                <form action="{{ route('admin.invoices.destroy', $invoice->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?')"><i class="ri-delete-bin-line"></i></button>
-                                                </form>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{ $invoice->id }}</td>
+                                        <td>{{ $invoice->vacation_id }}</td>
+                                        <td>{{ number_format($invoice->total_amount, 2) }} Francs CFA</td>
+                                        <td>{{ number_format($invoice->agent_payment, 2) }} Francs CFA</td>
+                                        <td>{{ number_format($invoice->agency_payment, 2) }} Francs CFA</td>
+                                        <td>
+                                            <span class="badge badge-{{ $invoice->status == 'paid' ? 'success' : 'warning' }}">
+                                                {{ ucfirst($invoice->status) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.invoices.show', $invoice->id) }}" class="btn btn-info btn-sm"><i class="ri-eye-line"></i></a>
+                                            <a href="{{ route('admin.invoices.edit', $invoice->id) }}" class="btn btn-warning btn-sm"><i class="ri-edit-line"></i></a>
+                                            <form action="{{ route('admin.invoices.destroy', $invoice->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?')"><i class="ri-delete-bin-line"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center">Aucune facture trouvée</td>
-                                        </tr>
+                                    <tr>
+                                        <td colspan="7" class="text-center">Aucune facture trouvée</td>
+                                    </tr>
                                     @endforelse
                                 </tbody>
                             </table>

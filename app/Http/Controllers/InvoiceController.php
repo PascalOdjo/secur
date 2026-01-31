@@ -6,52 +6,103 @@ use Illuminate\Http\Request;
 use App\Models\Vacation;
 use App\Models\Invoice;
 use App\Models\Demande;
+use App\Models\AgentPayment;
+use App\Models\Agent;
 
 class InvoiceController extends Controller
 {
 
-    public function index(){
-        $invoices = Invoice::paginate(10);
-        return view('admin.invoices.index', compact('invoices'));
+    public function index()
+    {
+        // Récupérer toutes les factures avec leurs demandes associées
+        $invoices = Invoice::with('demande.client', 'demande.site')
+            ->paginate(10);
+
+        // Recalculer les montants pour chaque facture basé sur les paiements réels
+        foreach ($invoices as $invoice) {
+            $this->updateInvoiceAmounts($invoice);
+        }
+
+        // Récupérer les paiements agents en attente et les agréger par agent
+        $agentPayments = \App\Models\AgentPayment::where('status', 'pending')
+            ->selectRaw('agent_id, SUM(amount) as total')
+            ->groupBy('agent_id')
+            ->get();
+
+        // Charger les informations des agents pour l'affichage
+        $agentPayments->load('agent');
+
+        return view('admin.invoices.index', compact('invoices', 'agentPayments'));
     }
     public function store(Request $request)
     {
-    // Validation des champs
-    $request->validate([
-        'demande_id' => 'required|exists:demandes,id',
-        'total_amount' => 'required|numeric|min:0',
-    ]);
+        // Validation des champs
+        $request->validate([
+            'demande_id' => 'required|exists:demandes,id',
+        ]);
 
-    // Création de la facture
-    $invoice = new Invoice();
-    $invoice->demande_id = $request->input('demande_id');
-    $invoice->total_amount = $request->input('total_amount');
-    $invoice->agent_payment = $invoice->total_amount * 0.25; // Calcul du paiement agent
-    $invoice->agency_payment = $invoice->total_amount * 0.75; // Calcul du paiement agence
-    $invoice->status = 'pending'; // Statut par défaut
-    $invoice->save();
+        // Vérifier qu'une facture n'existe pas déjà pour cette demande
+        $existingInvoice = Invoice::where('demande_id', $request->demande_id)->first();
+        if ($existingInvoice) {
+            return redirect()->back()->with('error', 'Une facture existe déjà pour cette demande.');
+        }
 
-    // Redirection avec un message de succès
-    return redirect()->route('admin.invoices.index')->with('success', 'Facture créée avec succès.');
-}
+        // Récupérer la demande
+        $demande = Demande::findOrFail($request->demande_id);
+
+        // Création de la facture basée sur la demande
+        $invoice = new Invoice();
+        $invoice->demande_id = $demande->id;
+        $invoice->total_amount = $demande->montant; // Utiliser le montant de la demande
+        $invoice->agent_payment = 0; // Sera mis à jour avec les paiements quotidiens
+        $invoice->agency_payment = 0; // À définir selon votre politique
+        $invoice->status = 'pending'; // La facture est en attente
+        $invoice->save();
+
+        // Redirection avec un message de succès
+        return redirect()->route('admin.invoices.index')->with('success', 'Facture créée avec succès pour la demande.');
+    }
 
 
 
-    public function show($invoiceId){
-        $invoice = Invoice::with('agents')->findOrFail($invoiceId);
+    public function show($invoiceId)
+    {
+        $invoice = Invoice::with('demande.client', 'demande.site', 'demande.vacations')->findOrFail($invoiceId);
+
+        // Recalculer les montants basés sur les paiements réels des agents
+        $this->updateInvoiceAmounts($invoice);
 
         return view('admin.invoices.show', compact('invoice'));
     }
 
-    private function calculateAmount($vacation){
-        $rate = 100;
-        return $rate;
+    /**
+     * Recalcule les montants agents et agence basés sur les paiements générés
+     */
+    private function updateInvoiceAmounts(Invoice $invoice)
+    {
+        // Récupérer tous les paiements des agents pour cette demande
+        $agentPaymentTotal = \App\Models\AgentPayment::whereHas('vacation', function ($query) {
+            $query->where('demande_id', $this->demande_id ?? null);
+        })->where('status', 'pending')
+            ->sum('amount');
+
+        // Si la facture a une demande associée
+        if ($invoice->demande_id) {
+            $agentPaymentTotal = \App\Models\AgentPayment::whereHas('vacation', function ($query) use ($invoice) {
+                $query->where('demande_id', $invoice->demande_id);
+            })->sum('amount');
+
+            // Mettre à jour les montants
+            $invoice->agent_payment = $agentPaymentTotal;
+            $invoice->agency_payment = $invoice->total_amount - $agentPaymentTotal;
+            $invoice->save();
+        }
     }
 
     public function pay($id)
     {
         $invoice = Invoice::findOrFail($id);
-        
+
         // Logique de paiement ici
         $invoice->status = 'paid'; // Met à jour le statut de la facture
         $invoice->save(); // Enregistre les modifications
@@ -60,9 +111,9 @@ class InvoiceController extends Controller
     }
     public function create($demande_id = null)
     {
-        $demandes = Demande::all(); // Récupérer toutes les demandes
-        $demande = $demande_id ? Demande::find($demande_id) : null; // Récupérer la demande si l'ID est fourni
-        return view('admin.invoices.create', compact('demandes', 'demande')); // Passer les demandes et la demande à la vue
+        // Cette méthode n'est plus nécessaire car les factures sont créées automatiquement
+        // lors de la création d'une demande. Rediriger vers l'index.
+        return redirect()->route('admin.invoices.index')->with('info', 'Les factures sont créées automatiquement avec les demandes.');
     }
 
     public function processPayment(Request $request, $id)
@@ -129,7 +180,16 @@ class InvoiceController extends Controller
         // Afficher la vue de modification de la facture
         return view('admin.invoices.edit', compact('invoice'));
     }
-    
 
-    
+    public function destroy($id)
+    {
+        // Récupérer la facture
+        $invoice = Invoice::findOrFail($id);
+
+        // Supprimer la facture
+        $invoice->delete();
+
+        // Redirection avec un message de succès
+        return redirect()->route('admin.invoices.index')->with('success', 'La facture a été supprimée avec succès.');
+    }
 }

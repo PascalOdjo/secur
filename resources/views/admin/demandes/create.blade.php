@@ -17,7 +17,7 @@
             <div class="col-md-4 col-lg-4">
                 <div class="widgetbar">
                     <a href="{{ route('admin.demandes.index') }}" class="btn btn-primary"><i class="ri-arrow-left-line mr-2"></i> Retour</a>
-                </div>                        
+                </div>
             </div>
         </div>
     </div>
@@ -30,36 +30,73 @@
                         <h5 class="card-title text-center font-25">Formulaire de Création d'une Demande</h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('admin.demandes.store') }}" method="POST">
+                        <form action="{{ route('admin.demandes.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!-- Gestion des erreurs -->
                             @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
                             @endif
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="client_id">Client</label>
-                                    <select id="client_id" name="client_id" class="form-control" required>
-                                        <option value="">Sélectionner un client</option>
-                                        @foreach ($clients as $client)
-                                            <option value="{{ $client->id }}">{{ $client->nom }} {{ $client->prenom }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="client_nom">Nom du Client</label>
+                                    <input type="text" id="client_nom" name="client_nom" class="form-control" value="{{ old('client_nom') }}" required>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="site_id">Site</label>
-                                    <select id="site_id" name="site_id" class="form-control" required>
-                                        <option value="">Sélectionner un site</option>
-                                        @foreach ($sites as $site)
-                                            <option value="{{ $site->id }}" data-client="{{ $site->client_id }}">{{ $site->name }}</option>
-                                        @endforeach
+                                    <label for="client_prenom">Prénom du Client</label>
+                                    <input type="text" id="client_prenom" name="client_prenom" class="form-control" value="{{ old('client_prenom') }}">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="client_email">Email</label>
+                                    <input type="email" id="client_email" name="client_email" class="form-control" value="{{ old('client_email') }}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="client_telephone">Téléphone</label>
+                                    <input type="tel" id="client_telephone" name="client_telephone" class="form-control" value="{{ old('client_telephone') }}">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="client_adresse">Adresse</label>
+                                    <input type="text" id="client_adresse" name="client_adresse" class="form-control" value="{{ old('client_adresse') }}">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="client_passport_photo">Photo Passport</label>
+                                    <input type="file" id="client_passport_photo" name="client_passport_photo" class="form-control" accept="image/*">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="site_name">Nom du Site</label>
+                                    <input type="text" id="site_name" name="site_name" class="form-control" value="{{ old('site_name') }}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="site_code">Code du Site (ex: 0331OIF)</label>
+                                    <input type="text" id="site_code" name="site_code" class="form-control" value="{{ old('site_code') }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="site_address">Adresse du Site</label>
+                                    <input type="text" id="site_address" name="site_address" class="form-control" value="{{ old('site_address') }}">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="site_type">Type de Site</label>
+                                    <select id="site_type" name="site_type" class="form-control" required>
+                                        <option value="LION" {{ old('site_type') == 'LION' ? 'selected' : '' }}>LION</option>
+                                        <option value="LIONNE" {{ old('site_type') == 'LIONNE' ? 'selected' : '' }}>LIONNE</option>
                                     </select>
                                 </div>
                             </div>
@@ -89,6 +126,24 @@
                                     <input type="number" id="nombre_agents" name="nombre_agents" class="form-control" value="{{ old('nombre_agents') }}" required min="1">
                                 </div>
                                 <div class="form-group col-md-6">
+                                    <label for="montant">Montant (pour paiement des agents)</label>
+                                    <input type="number" id="montant" name="montant" class="form-control" step="0.01" value="{{ old('montant') }}" required min="0">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="start_date">Date de début du contrat</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ old('start_date') }}" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="end_date">Date de fin du contrat</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ old('end_date') }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
                                     <label for="description">Description</label>
                                     <textarea id="description" name="description" class="form-control">{{ old('description') }}</textarea>
                                 </div>

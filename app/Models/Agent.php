@@ -32,7 +32,7 @@ class Agent extends Model
         'password',
         'created_at',
         'updated_at',
-        
+        'squad_id',
     ];
 
     protected $casts = [
@@ -41,6 +41,16 @@ class Agent extends Model
 
     public function personneaprevenir()
     {
-    return $this->hasMany(PersonneAPrevenir::class);
+        return $this->hasMany(PersonneAPrevenir::class);
+    }
+
+    public function squad()
+    {
+        return $this->belongsTo(Squad::class);
+    }
+
+    public function agentPayments()
+    {
+        return $this->hasMany(AgentPayment::class);
     }
 }
