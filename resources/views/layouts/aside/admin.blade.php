@@ -6,7 +6,15 @@
         </a>
         <ul class="vertical-submenu">
             <li><a href="{{ route('admin.dashboard') }}">Administration</a></li>
-            <li><a href="{{ route('logout') }}">logout</a></li>
+            <li>
+                <a href="#"
+                   onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
+                    logout
+                </a>
+                <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                    @csrf
+                </form>
+            </li>
         </ul>
     </li>
     <li class="vertical-header">Components</li>
@@ -18,6 +26,15 @@
         <ul class="vertical-submenu">
             <li><a href="{{route('admin.demandes.create')}}">Enregistrement</a></li>
             <li><a href="{{route('admin.demandes.index')}}">Liste des enregistrements</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="javaScript:void();">
+            <i class="ri-file-list-3-line"></i>
+            <span>Contrats</span><i class="ri-arrow-right-s-line"></i>
+        </a>
+        <ul class="vertical-submenu">
+            <li><a href="{{ route('admin.demandes.index') }}">Contrats par Demande (64/agent)</a></li>
         </ul>
     </li>
     <li>

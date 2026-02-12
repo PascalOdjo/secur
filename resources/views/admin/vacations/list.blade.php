@@ -125,6 +125,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- Payment Breakdown for this Demand -->
+        <div class="col-lg-12 m-b-30">
+            @include('admin.demandes.payment-breakdown-card', ['demande' => $item['demande']])
+        </div>
         @empty
         <div class="col-lg-12">
             <div class="alert alert-warning">

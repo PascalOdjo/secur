@@ -36,28 +36,15 @@
                         </div>
                         @endif
 
-                        <!-- Paiements agents en attente -->
-                        @if(isset($agentPayments) && $agentPayments->isNotEmpty())
-                        <div class="mb-3">
-                            <h5>Paiements agents en attente</h5>
-                            <ul>
-                                @foreach($agentPayments as $ap)
-                                <li>{{ $ap->agent ? $ap->agent->nom ?? $ap->agent->prenom ?? 'Agent #'.$ap->agent_id : 'Agent #' . $ap->agent_id }} : {{ number_format($ap->total, 2) }} Francs CFA</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
-
                         <!-- Tableau des factures -->
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>#</th>
-                                        <th>Demande ID</th>
+                                        <th>Client & Demande</th>
+                                        <th>Répartition 50/50 (CFA)</th>
                                         <th>Montant Total</th>
-                                        <th>Paiement Agents</th>
-                                        <th>Paiement Agence</th>
                                         <th>Statut</th>
                                         <th>Actions</th>
                                     </tr>
@@ -65,24 +52,52 @@
                                 <tbody>
                                     @forelse ($invoices as $invoice)
                                     <tr>
-                                        <td>{{ $invoice->id }}</td>
-                                        <td>{{ $invoice->vacation_id }}</td>
-                                        <td>{{ number_format($invoice->total_amount, 2) }} Francs CFA</td>
-                                        <td>{{ number_format($invoice->agent_payment, 2) }} Francs CFA</td>
-                                        <td>{{ number_format($invoice->agency_payment, 2) }} Francs CFA</td>
+                                        <td><strong>{{ $invoice->id }}</strong></td>
                                         <td>
-                                            <span class="badge badge-{{ $invoice->status == 'paid' ? 'success' : 'warning' }}">
-                                                {{ ucfirst($invoice->status) }}
+                                            @if($invoice->demande)
+                                                <div class="font-weight-bold">{{ $invoice->demande->client->nom ?? 'Client #' . $invoice->demande->client_id }}</div>
+                                                <small class="text-muted">Demande #{{ $invoice->demande_id }} | Site: {{ $invoice->demande->site->name ?? '-' }}</small>
+                                            @else
+                                                <span class="text-muted">N/A</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <div class="d-flex justify-content-between mb-1" style="min-width: 200px;">
+                                                    <span class="small text-muted">Exploitation:</span>
+                                                    <span class="badge badge-info">{{ number_format($invoice->total_amount, 0, ',', ' ') }}</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <span class="small text-muted">Trésorerie:</span>
+                                                    @php
+                                                        $tresorerie = $invoice->demande ? $invoice->demande->montant_tresorerie : $invoice->total_amount;
+                                                    @endphp
+                                                    <span class="badge badge-secondary">{{ number_format($tresorerie, 0, ',', ' ') }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-primary font-weight-bold">
+                                                @php
+                                                    $total = $invoice->demande ? $invoice->demande->montant_brut : ($invoice->total_amount * 2);
+                                                @endphp
+                                                {{ number_format($total, 0, ',', ' ') }} CFA
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-{{ $invoice->status == 'paid' ? 'success' : 'warning' }} p-2">
+                                                <i class="ri-{{ $invoice->status == 'paid' ? 'checkbox-circle' : 'time' }}-line mr-1"></i>
+                                                {{ strtoupper($invoice->status) }}
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.invoices.show', $invoice->id) }}" class="btn btn-info btn-sm"><i class="ri-eye-line"></i></a>
-                                            <a href="{{ route('admin.invoices.edit', $invoice->id) }}" class="btn btn-warning btn-sm"><i class="ri-edit-line"></i></a>
-                                            <form action="{{ route('admin.invoices.destroy', $invoice->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?')"><i class="ri-delete-bin-line"></i></button>
-                                            </form>
+                                            <div class="btn-group">
+                                                <a href="{{ route('admin.invoices.show', $invoice->id) }}" class="btn btn-info btn-sm" title="Détails"><i class="ri-eye-line"></i></a>
+                                                @if($invoice->demande)
+                                                <a href="{{ route('admin.demandes.paiement', $invoice->demande_id) }}" class="btn btn-success btn-sm" title="Prix et Salaires"><i class="ri-money-cny-box-line"></i></a>
+                                                @endif
+                                                <a href="{{ route('admin.invoices.edit', $invoice->id) }}" class="btn btn-warning btn-sm" title="Modifier"><i class="ri-edit-line"></i></a>
+                                            </div>
                                         </td>
                                     </tr>
                                     @empty

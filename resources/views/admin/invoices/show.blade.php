@@ -38,45 +38,42 @@
 
                         @if($invoice->demande)
                             <h6>Client :</h6>
-                            <p><strong>Nom :</strong> {{ $invoice->demande->client->nom }}</p>
-                            <p><strong>Adresse :</strong> {{ $invoice->demande->client->adresse }}</p>
-                            <p><strong>Contact :</strong> {{ $invoice->demande->client->contact }}</p>
+                            <p><strong>Nom :</strong> {{ $invoice->demande->client->nom ?? '-' }} {{ $invoice->demande->client->prenom ?? '' }}</p>
+                            <p><strong>Adresse :</strong> {{ $invoice->demande->client->adresse ?? '-' }}</p>
+                            <p><strong>Téléphone :</strong> {{ $invoice->demande->client->telephone ?? '-' }}</p>
                         @else
                             <p>Aucun client associé.</p>
                         @endif
 
                         @if($invoice->vacation)
                             <h6>Vacation Associée :</h6>
-                            <p><strong>Description :</strong> {{ $invoice->vacation->description }}</p>
+                            <p><strong>Description :</strong> {{ $invoice->vacation->description ?? '-' }}</p>
                             <p><strong>Statut :</strong> {{ ucfirst($invoice->vacation->status) }}</p>
-                            <p><strong>Heure de Début :</strong> {{ $invoice->vacation->start_time->format('d/m/Y H:i:s') }}</p>
-                            <p><strong>Heure de Fin :</strong> {{ $invoice->vacation->end_time->format('d/m/Y H:i:s') }}</p>
-                        @else
-                            <p>Aucune vacation associée.</p>
+                            <p><strong>Heure de Début :</strong> {{ $invoice->vacation->start_time ? $invoice->vacation->start_time->format('d/m/Y H:i:s') : '-' }}</p>
+                            <p><strong>Heure de Fin :</strong> {{ $invoice->vacation->end_time ? $invoice->vacation->end_time->format('d/m/Y H:i:s') : '-' }}</p>
                         @endif
 
-                        <h6>Détails des Agents :</h6>
+                        <h6 class="mt-4">Agents Assignés à cette Demande :</h6>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nom</th>
-                                    <th>Prénom</th>
-                                    <th>Contact</th>
+                                    <th>Nom & Prénom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($invoice->agents as $agent)
+                                @forelse($invoice->agents as $agent)
                                     <tr>
-                                        <td>{{ $agent->nom }}</td>
-                                        <td>{{ $agent->prenom }}</td>
-                                        <td>{{ $agent->contact }}</td>
+                                        <td>{{ $agent->nom }} {{ $agent->prenom }}</td>
+                                        <td>{{ $agent->email }}</td>
+                                        <td>{{ $agent->telephone }}</td>
                                     </tr>
-                                @endforeach
-                                @if($invoice->agents->isEmpty())
+                                @empty
                                     <tr>
-                                        <td colspan="3" class="text-center">Aucun agent associé à cette facture.</td>
+                                        <td colspan="3" class="text-center">Aucun agent assigné à cette demande pour le moment.</td>
                                     </tr>
-                                @endif
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

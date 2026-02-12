@@ -123,11 +123,20 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="nombre_contrats">Nombre d'agents</label>
-                                    <input type="number" id="nombre_agents" name="nombre_agents" class="form-control" value="{{ old('nombre_agents') }}" required min="1">
+                                    <input type="number" id="nombre_agents" name="nombre_agents" class="form-control" value="{{ old('nombre_agents') }}" required min="4">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="montant">Montant (pour paiement des agents)</label>
-                                    <input type="number" id="montant" name="montant" class="form-control" step="0.01" value="{{ old('montant') }}" required min="0">
+                                    <label for="montant_par_agent">Montant par agent <span class="text-danger">*</span></label>
+                                    <input type="number" id="montant_par_agent" name="montant_par_agent" class="form-control" step="0.01" value="{{ old('montant_par_agent') }}" required min="1" placeholder="Ex: 105000">
+                                    <small class="form-text text-muted">Salaire par agent = Montant ÷ 2</small>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="montant">Montant total brut</label>
+                                    <input type="number" id="montant" name="montant" class="form-control" step="0.01" value="{{ old('montant') }}" min="0" readonly>
+                                    <small class="form-text text-muted">Calculé automatiquement: nombre_agents × montant_par_agent</small>
                                 </div>
                             </div>
 
@@ -158,5 +167,25 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nombreAgentsInput = document.getElementById('nombre_agents');
+        const montantParAgentInput = document.getElementById('montant_par_agent');
+        const montantInput = document.getElementById('montant');
+
+        function calculateMontant() {
+            const nombreAgents = parseFloat(nombreAgentsInput.value) || 0;
+            const montantParAgent = parseFloat(montantParAgentInput.value) || 0;
+            const montant = nombreAgents * montantParAgent;
+            montantInput.value = montant > 0 ? montant.toFixed(2) : '';
+        }
+
+        nombreAgentsInput.addEventListener('input', calculateMontant);
+        montantParAgentInput.addEventListener('input', calculateMontant);
+
+        // Calculer au chargement si des valeurs existent
+        calculateMontant();
+    });
+</script>
 
 @endsection

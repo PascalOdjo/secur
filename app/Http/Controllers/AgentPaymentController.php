@@ -31,6 +31,15 @@ class AgentPaymentController extends Controller
             $query->orderBy('date', 'desc');
         }])->get();
 
+        // Enrichir chaque agent avec ses demandes uniques via les contrats
+        foreach ($agents as $agent) {
+             $demandeIds = \App\Models\Contrat::where('agent_id', $agent->id)
+                ->pluck('demande_id')
+                ->unique();
+                
+             $agent->demandes = Demande::whereIn('id', $demandeIds)->with('client')->get();
+        }
+
         return view('admin.agent-payments.dashboard', compact('agents'));
     }
 

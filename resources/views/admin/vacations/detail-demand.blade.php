@@ -59,6 +59,11 @@
             </div>
         </div>
 
+        <!-- Payment Breakdown -->
+        <div class="col-lg-12 m-b-30">
+            @include('admin.demandes.payment-breakdown-card', ['demande' => $demande])
+        </div>
+
         <!-- All Vacations Combined -->
         <div class="col-lg-12 m-b-30">
             <div class="card m-b-30">

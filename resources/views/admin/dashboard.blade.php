@@ -4,59 +4,32 @@
 <div class="breadcrumbbar">
     <div class="row align-items-center">
         <div class="col-md-8 col-lg-8">
-            <h4 class="page-title">Administration</h4>
+            <h4 class="page-title">Tableau de Bord</h4>
             <div class="breadcrumb-list">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Administration</li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Tableau de Bord</li>
                 </ol>
             </div>
         </div>
         <div class="col-md-4 col-lg-4">
             <div class="widgetbar">
-                <a href="" class="btn btn-primary"><i class="ri-user-add-line mr-2"></i>Ajouter Admin</a>
-            </div>                        
+                <a href="{{ route('admin.demandes.create') }}" class="btn btn-primary"><i class="ri-add-line mr-2"></i>Nouvelle Demande</a>
+            </div>
         </div>
     </div>
-    
-    <div class="contentbar">   
-        <!-- Start row -->
-        <div class="row"> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-3">
+
+    <div class="contentbar">
+        <!-- KPI Cards Row 1 -->
+        <div class="row">
+            <!-- Total Agents -->
+            <div class="col-lg-6 col-xl-3">
                 <div class="card m-b-30">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col-8">
-                                <p class="font-15">Revenue Increase</p>
-                                <h4 class="card-title mb-0">5%</h4>
-                            </div>
-                            <div class="col-4 text-right">
-                                <span class="iconbar iconbar-md bg-primary text-white rounded"><i class="ri-arrow-right-up-line align-unset"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card m-b-30">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col-8">
-                                <p class="font-15">Open Projects</p>
-                                <h4 class="card-title mb-0">198</h4>
-                            </div>
-                            <div class="col-4 text-right">
-                                <span class="iconbar iconbar-md bg-primary text-white rounded"><i class="ri-money-dollar-circle-line align-unset"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card m-b-30">
-                    <div class="card-body">
-                        <div class="row align-items-center no-gutters">
-                            <div class="col-8">
-                                <p class="font-15">Working Employees</p>
-                                <h4 class="card-title mb-0">15,986</h4>
+                                <p class="font-15">Nombre d'Agents</p>
+                                <h4 class="card-title mb-0">{{ $totalAgents }}</h4>
                             </div>
                             <div class="col-4 text-right">
                                 <span class="iconbar iconbar-md bg-primary text-white rounded"><i class="ri-user-3-line align-unset"></i></span>
@@ -65,260 +38,281 @@
                     </div>
                 </div>
             </div>
-            <!-- End col -->  
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-9">
+
+            <!-- Total Demandes -->
+            <div class="col-lg-6 col-xl-3">
                 <div class="card m-b-30">
-                    <div class="card-header">                                
-                        <div class="row align-items-center">
-                            <div class="col-6 col-lg-9">
-                                <h5 class="card-title mb-0">Lead Compare</h5>
-                            </div>
-                            <div class="col-6 col-lg-3">
-                                <select class="form-control font-12">
-                                    <option value="class1" selected>Last Week</option>
-                                    <option value="class2">Last Month</option>
-                                    <option value="class3">Last Year</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <div id="apex-bar-chart"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- End col -->                    
-        </div>
-        <!-- End row -->
-        <!-- Start row -->
-        <div class="row"> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-9">
-                <div class="card m-b-30">
-                    <div class="card-header">                                
-                        <div class="row align-items-center">
-                            <div class="col-6 col-lg-9">
-                                <h5 class="card-title mb-0">Average Monthly Revenue</h5>
-                            </div>
-                            <div class="col-6 col-lg-3">
-                                <select class="form-control font-12">
-                                    <option value="class1" selected>Last Week</option>
-                                    <option value="class2">Last Month</option>
-                                    <option value="class3">Last Year</option>
-                                </select>
-                            </div>
-                        </div>
-                        <h2>$9,86,587</h2>  
-                    </div>
-                    <div class="card-body p-0">
-                        <div id="apex-area-chart"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- End col -->  
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-3">
-                <div class="card m-b-30">
-                    <div class="card-header text-center">                                
-                        <h5 class="card-title mb-0">Ticket Status</h5>
-                    </div>
-                    <div class="card-body text-center">
-                        <div id="apex-stroked-circle-guage-chart"></div>
-                    </div>
-                    <div class="card-footer text-center">
-                        <div class="row">
-                            <div class="col-4 border-right px-0">
-                                <p class="my-2">New</p>
-                                <h5>589</h5>
-                            </div>
-                            <div class="col-4 border-right px-0">
-                                <p class="my-2">Open</p>
-                                <h5>1298</h5>
-                            </div>
-                            <div class="col-4 px-0">
-                                <p class="my-2">Time</p>
-                                <h5>1 Day</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End col -->                    
-        </div>
-        <!-- End row -->
-        <!-- Start row -->
-        <div class="row"> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-4">
-                <div class="card m-b-30">
-                    <div class="card-header">                                
-                        <h5 class="card-title mb-0">Projects</h5>
-                    </div>
                     <div class="card-body">
-                        <div class="text-center">
-                            <h4>Project Space EU</h4>
-                            <p>Expected Delivery Date<br> 25 Oct, 2020</p>
-                        </div>
-                        <div class="row align-items-center my-5">
-                            <div class="col-7">
-                                <h4 class="mb-1">192</h4>
-                                <p class="mb-0">Team Strength</p>
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-8">
+                                <p class="font-15">Nombre de Demandes</p>
+                                <h4 class="card-title mb-0">{{ $totalDemandes }}</h4>
                             </div>
-                            <div class="col-5 text-right">
-                                <div class="avatar-group">
-                                    <div class="avatar">
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="John Doe">
-                                            <img src="{{asset('public/assets/images/users/men.svg')}}" alt="avatar" class="rounded-circle">
-                                        </a>
-                                    </div>
-                                    <div class="avatar">
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="John Doe">
-                                            <img src="{{asset('public/assets/images/users/women.svg')}}" alt="avatar" class="rounded-circle">
-                                        </a>
-                                    </div>
-                                    <div class="avatar">
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="John Doe">
-                                            <img src="{{asset('public/assets/images/users/boy.svg')}}" alt="avatar" class="rounded-circle">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>                                    
-                        </div>
-                        <h5 class="mb-3">75% <span class="float-right font-16 font-weight-normal text-muted">Completed</span></h5>
-                        <div class="progress" style="height: 5px;">
-                          <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="col-4 text-right">
+                                <span class="iconbar iconbar-md bg-success text-white rounded"><i class="ri-file-list-line align-unset"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- End col -->  
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-4">
+
+            <!-- Total Vacations -->
+            <div class="col-lg-6 col-xl-3">
                 <div class="card m-b-30">
-                    <div class="card-header">                                
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-8">
+                                <p class="font-15">Total Vacations</p>
+                                <h4 class="card-title mb-0">{{ $totalVacations }}</h4>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span class="iconbar iconbar-md bg-info text-white rounded"><i class="ri-calendar-2-line align-unset"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Contrats -->
+            <div class="col-lg-6 col-xl-3">
+                <div class="card m-b-30">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-8">
+                                <p class="font-15">Total Contrats</p>
+                                <h4 class="card-title mb-0">{{ $totalContrats }}</h4>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span class="iconbar iconbar-md bg-secondary text-white rounded"><i class="ri-file-contract-line align-unset"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Paiements (FCFA) -->
+            <div class="col-lg-6 col-xl-4">
+                <div class="card m-b-30" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-8">
+                                <p class="font-15">Total Paiements</p>
+                                <h3 class="card-title mb-0">{{ number_format($totalPayments, 0, ',', ' ') }} FCFA</h3>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span class="iconbar iconbar-md bg-white text-primary rounded"><i class="ri-money-dollar-box-line align-unset"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards Row 2 -->
+        <div class="row">
+            <!-- Paiements en Attente -->
+            <div class="col-lg-6 col-xl-6">
+                <div class="card m-b-30">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-8">
+                                <p class="font-15 text-warning">Paiements en Attente</p>
+                                <h3 class="card-title mb-0 text-warning">{{ number_format($totalPending, 0, ',', ' ') }} FCFA</h3>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span class="iconbar iconbar-md bg-warning text-white rounded"><i class="ri-time-line align-unset"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paiements Effectués -->
+            <div class="col-lg-6 col-xl-6">
+                <div class="card m-b-30">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col-8">
+                                <p class="font-15 text-success">Paiements Effectués</p>
+                                <h3 class="card-title mb-0 text-success">{{ number_format($totalPaid, 0, ',', ' ') }} FCFA</h3>
+                            </div>
+                            <div class="col-4 text-right">
+                                <span class="iconbar iconbar-md bg-success text-white rounded"><i class="ri-check-double-line align-unset"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Row -->
+        <div class="row">
+            <!-- Agents with Pending Payments -->
+            <div class="col-lg-12 col-xl-6">
+                <div class="card m-b-30">
+                    <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-9">
-                                <h5 class="card-title mb-0">Project Sector</h5>
+                                <h5 class="card-title mb-0"><i class="ri-user-warning-line mr-2"></i>Agents en Attente de Paiement</h5>
                             </div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-outline-light text-muted btn-sm float-right font-12">View</button>
+                                <a href="{{ route('admin.agent-payments.dashboard') }}" class="btn btn-outline-primary btn-sm float-right font-12">Voir Tout</a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
+                        @if($agentsWithPending->isNotEmpty())
                         <div class="table-responsive">
                             <table class="table table-borderless mb-0">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Progress</th>
-                                        <th class="text-right">%</th>
+                                        <th>Nom</th>
+                                        <th>Montant Attente</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($agentsWithPending as $agent)
                                     <tr>
-                                        <td>Healthcare</td>
                                         <td>
-                                            <div class="progress" style="height: 4px;">
-                                              <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
+                                            <strong>{{ $agent->nom }} {{ $agent->prenom }}</strong>
+                                            <br>
+                                            <small class="text-muted">ID: {{ $agent->id }}</small>
                                         </td>
-                                        <td class="text-right">75%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Banking Finance</td>
                                         <td>
-                                            <div class="progress" style="height: 4px;">
-                                              <div class="progress-bar bg-success" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
+                                            <span class="badge badge-warning">
+                                                {{ number_format($agent->agentPayments->sum('amount'), 0, ',', ' ') }} FCFA
+                                            </span>
                                         </td>
-                                        <td class="text-right">40%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>FMCG</td>
                                         <td>
-                                            <div class="progress" style="height: 4px;">
-                                              <div class="progress-bar bg-danger" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
+                                            <a href="{{ route('admin.agent-payments.show', $agent->id) }}" class="btn btn-info btn-sm" title="Détails">
+                                                <i class="ri-eye-line"></i>
+                                            </a>
                                         </td>
-                                        <td class="text-right">60%</td>
                                     </tr>
-                                    <tr>
-                                        <td>Agriculture</td>
-                                        <td>
-                                            <div class="progress" style="height: 4px;">
-                                              <div class="progress-bar bg-warning" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">50%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Automobile</td>
-                                        <td>
-                                            <div class="progress" style="height: 4px;">
-                                              <div class="progress-bar bg-info" role="progressbar" style="width: 87%;" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">87%</td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
+                        @else
+                        <p class="text-muted text-center mb-0">Aucun agent en attente de paiement</p>
+                        @endif
                     </div>
                 </div>
             </div>
-            <!-- End col --> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-4">
+
+            <!-- Recent Demands Workflow -->
+            <div class="col-lg-12 col-xl-6">
                 <div class="card m-b-30">
-                    <div class="card-header">                                
+                    <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-9">
-                                <h5 class="card-title mb-0">Activity</h5>
+                                <h5 class="card-title mb-0"><i class="ri-file-list-line mr-2"></i>Demandes Récentes (Workflow)</h5>
                             </div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-outline-light text-muted btn-sm float-right font-12">View</button>
+                                <a href="{{ route('admin.demandes.index') }}" class="btn btn-outline-primary btn-sm float-right font-12">Voir Tout</a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <ul class="list-unstyled mb-0">                                                    
-                            <li class="media mb-4">
-                                <span class="iconbar iconbar-md bg-primary text-white rounded align-self-center mr-3"><i class="ri-folder-5-line align-unset"></i></span>
-                                <div class="media-body">
-                                    <h5 class="mt-0 mb-1 font-16">Project 01 timeline approved</h5>
-                                    <p class="mb-0">2 hours ago</p>                            
-                                </div>
-                            </li>
-                            <li class="media mb-4">
-                                <span class="iconbar iconbar-md bg-success text-white rounded align-self-center mr-3"><i class="ri-user-3-line align-unset"></i></span>
-                                <div class="media-body">
-                                    <h5 class="mt-0 mb-1 font-16">Ronnie applied for leave</h5>
-                                    <p class="mb-0">10 hours ago</p>                            
-                                </div>
-                            </li>
-                            <li class="media mb-4">
-                                <span class="iconbar iconbar-md bg-warning text-white rounded align-self-center mr-3"><i class="ri-calendar-event-line align-unset"></i></span>
-                                <div class="media-body">
-                                    <h5 class="mt-0 mb-1 font-16">Meeting Schedule with WIPRO</h5>
-                                    <p class="mb-0">27 May, 2020</p>                            
-                                </div>
-                            </li>
-                            <li class="media mb-4">
-                                <span class="iconbar iconbar-md bg-danger text-white rounded align-self-center mr-3"><i class="ri-eye-2-line align-unset"></i></span>
-                                <div class="media-body">
-                                    <h5 class="mt-0 mb-1 font-16">Presentation for final tapeout</h5>
-                                    <p class="mb-0">15 Mar, 2020</p>                            
-                                </div>
-                            </li>
-                        </ul>
+                        @if($recentDemandes->isNotEmpty())
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Demande</th>
+                                        <th>Client</th>
+                                        <th>Vacations</th>
+                                        <th>Agents</th>
+                                        <th>Montant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($recentDemandes as $item)
+                                    @php $demande = $item['demande']; @endphp
+                                    <tr>
+                                        <td>
+                                            <strong>#{{ $demande->id }}</strong>
+                                            <br>
+                                            <small class="text-muted">{{ $demande->site ? $demande->site->nom : 'N/A' }}</small>
+                                        </td>
+                                        <td>
+                                            <small>{{ $demande->client ? $demande->client->nom : 'N/A' }}</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-info">
+                                                {{ $item['total_vacations'] }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if($item['agents_assigned'] > 0)
+                                            <span class="badge badge-success">
+                                                {{ $item['agents_assigned'] }}
+                                            </span>
+                                            @else
+                                            <span class="badge badge-warning">
+                                                0
+                                            </span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <small>{{ number_format($demande->montant_brut ?? 0, 0, ',', ' ') }} CFA</small>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @else
+                        <p class="text-muted text-center mb-0">Aucune demande récente</p>
+                        @endif
                     </div>
                 </div>
             </div>
-            <!-- End col -->                    
         </div>
-        <!-- End row -->
+
+        <!-- Quick Links Row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card m-b-30">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="ri-links-line mr-2"></i>Accès Rapide</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <a href="{{ route('admin.demandes.index') }}" class="card text-center p-3 text-decoration-none" style="border: 2px solid #007bff;">
+                                    <i class="ri-file-list-line ri-2x text-primary mb-2"></i>
+                                    <h6 class="text-primary">Demandes</h6>
+                                    <small class="text-muted">{{ $totalDemandes }} entrée(s)</small>
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a href="{{ route('admin.agent-payments.dashboard') }}" class="card text-center p-3 text-decoration-none" style="border: 2px solid #28a745;">
+                                    <i class="ri-money-dollar-box-line ri-2x text-success mb-2"></i>
+                                    <h6 class="text-success">Paiements Agents</h6>
+                                    <small class="text-muted">Dashboard</small>
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a href="{{ route('vacations-list.index') }}" class="card text-center p-3 text-decoration-none" style="border: 2px solid #17a2b8;">
+                                    <i class="ri-calendar-2-line ri-2x text-info mb-2"></i>
+                                    <h6 class="text-info">Vacations</h6>
+                                    <small class="text-muted">{{ $totalVacations }} vacation(s)</small>
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <a href="{{ route('admin.agents.index') }}" class="card text-center p-3 text-decoration-none" style="border: 2px solid #6c757d;">
+                                    <i class="ri-user-3-line ri-2x text-secondary mb-2"></i>
+                                    <h6 class="text-secondary">Agents</h6>
+                                    <small class="text-muted">{{ $totalAgents }} agent(s)</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

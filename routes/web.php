@@ -59,6 +59,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('pointages', PointageController::class);
         Route::resource('clients', ClientController::class);
         Route::resource('demandes', DemandeController::class);
+        Route::get('demandes/{demande}/contrats-par-agent', [DemandeController::class, 'contratsParAgent'])->name('demandes.contrats-par-agent');
+        Route::get('demandes/{demande}/paiement', [DemandeController::class, 'afficherPaiement'])->name('demandes.paiement');
+        Route::post('demandes/{demande}/assign-agent', [DemandeController::class, 'assignAgent'])->name('demandes.assign-agent');
         Route::resource('invoices', InvoiceController::class);
         Route::post('invoices/{id}/pay', [InvoiceController::class, 'pay'])->name('invoices.pay');
         Route::post('invoices/{id}/processPayment', [InvoiceController::class, 'processPayment'])->name('invoices.processPayment');

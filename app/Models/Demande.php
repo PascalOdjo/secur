@@ -24,6 +24,9 @@ class Demande extends Model
         'montant_exploitation',
         'montant_tresorerie',
         'status_validation',
+        'montant_par_agent',
+        'salaire_par_agent',
+        'montant_par_vacation',
     ];
 
     // Valeur par défaut pour le champ type_vacation
@@ -42,6 +45,11 @@ class Demande extends Model
     public function vacations()
     {
         return $this->hasMany(Vacation::class);
+    }
+
+    public function contrats()
+    {
+        return $this->hasMany(Contrat::class);
     }
 
     public function invoice()

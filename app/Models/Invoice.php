@@ -28,8 +28,15 @@ class Invoice extends Model
         return $this->belongsTo(Vacation::class);
     }
 
-    public function agents()
+    public function getAgentsAttribute()
     {
-        return $this->hasMany(Agent::class);
+        if (!$this->demande) return collect();
+        
+        return Agent::whereIn('id', function($query) {
+            $query->select('agent_id')
+                  ->from('contrats')
+                  ->where('demande_id', $this->demande_id)
+                  ->whereNotNull('agent_id');
+        })->get();
     }
 }

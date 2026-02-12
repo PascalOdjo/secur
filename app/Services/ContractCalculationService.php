@@ -101,7 +101,6 @@ class ContractCalculationService
 
         $vacation = new Vacation([
             'demande_id' => $demande->id,
-            'site_id' => $demande->site_id,
             'start_time' => $startDate,
             'end_time' => $endDate,
             'type_vacation' => $demande->type_vacation,
