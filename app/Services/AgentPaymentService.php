@@ -56,12 +56,19 @@ class AgentPaymentService
         }
 
         // Update demande with calculated values
+        // Part Exploitation par agent (50% du montant par agent)
+        $salaireParAgent = ($montantFourni ?? $payment['total_cfa']) / ($demande->nombre_agents * 2);
+        // Montant par vacation (64 vacations par agent)
+        $montantParVacation = $salaireParAgent / 64;
+
         $demande->update([
             'montant_brut' => $payment['total_cfa'],
             'montant_exploitation' => $payment['exploitation_cfa'],
             'montant_tresorerie' => $payment['tresorerie_cfa'],
-            'valeur_base' => $montantFourni ?? $payment['total_value'], // Use provided montant directly as valeur_base when available
+            'valeur_base' => $montantFourni ?? $payment['total_value'],
             'prix_par_agent' => $payment['price_per_contract_cfa'],
+            'salaire_par_agent' => $salaireParAgent,
+            'montant_par_vacation' => $montantParVacation,
         ]);
 
         return [
@@ -154,12 +161,12 @@ class AgentPaymentService
         $realCount = $vacations->where('vacation_type', 'reel')->count();
         $virtualCount = $vacations->where('vacation_type', 'virtuel')->count();
 
-        // Calculate total contracts: 4 agents × 4 contracts per group = 16 contracts
-        $totalContracts = $demande->nombre_agents * 4;
+        // Chaque agent a 64 postes (16 réels + 48 virtuels)
+        $totalContracts = $demande->nombre_agents * 64;
 
-        // Option B: Each contract (real or virtual) costs 205 FCFA
-        // This represents the cost per round performed by the agent
-        $montantParVacation = 205; // Fixed amount per contract/round
+        // Prix par poste = montant_par_agent / 512 (dernière division par 4)
+        $montantParAgent = $demande->montant_par_agent ?? (($demande->montant && $demande->nombre_agents) ? $demande->montant / $demande->nombre_agents : 0);
+        $montantParVacation = $montantParAgent > 0 ? round($montantParAgent / 512) : 205;
 
         return [
             'total_vacations' => $vacations->count(),
@@ -249,7 +256,8 @@ class AgentPaymentService
             return ['success' => false, 'message' => 'Invalid demande data', 'created' => 0];
         }
 
-        $montantPerVacation = $demande->montant_exploitation / $totalVacationsForDemande;
+        // D'après les spécifications, on divise par 4 pour obtenir la part de l'agent (le reste va à l'agence)
+        $montantPerVacation = ($demande->montant_exploitation / $totalVacationsForDemande) / 4;
 
         foreach ($vacations as $vacation) {
             $agentIds = array_filter([$vacation->agent_1_id, $vacation->agent_2_id]);

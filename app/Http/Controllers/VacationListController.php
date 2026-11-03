@@ -33,11 +33,11 @@ class VacationListController extends Controller
      * - Exploitation 256 → /2=128 → /2=64 contracts → /4=16 → /16=1 base contract
      * - 1 base contract / 4 = 1 real + 3 virtual contracts
      * - 1 agent (128 units) = 105,000 CFA francs
-     * - Each contract = 205 CFA francs
+     * - Prix par poste = montant_par_agent / 512 (≈ 205 ou 253)
      */
     public function index(): View
     {
-        $demandes = Demande::with(['vacations', 'client', 'site'])
+        $demandes = Demande::with(['vacations', 'client', 'site', 'contrats.agent'])
             ->whereHas('vacations')
             ->get();
 
@@ -112,6 +112,16 @@ class VacationListController extends Controller
                 'virtualVacations' => $virtualVacations,
                 'groups' => $groups,
                 'contract_counts' => $contractCounts,
+                'agents_breakdown' => $demande->contrats->whereNotNull('agent_id')->pluck('agent')->unique('id')->values()->map(function ($agent) use ($montantParVacation) {
+                    return [
+                        'id' => $agent->id,
+                        'nom' => $agent->nom,
+                        'prenom' => $agent->prenom,
+                        'postes_total' => 64,
+                        'prix_poste' => $montantParVacation,
+                        'total_agent' => 64 * $montantParVacation,
+                    ];
+                })->all(),
             ];
 
             $vacationsList[] = $demandeData;

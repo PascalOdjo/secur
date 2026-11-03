@@ -54,6 +54,38 @@
                         </small>
                     </div>
 
+                    <div class="alert alert-secondary">
+                        <small>
+                            <strong>Détail par agent:</strong>
+                        </small>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Agent</th>
+                                        <th>Postes total</th>
+                                        <th>Prix par poste</th>
+                                        <th>Total pour l’agent</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse(($item['agents_breakdown'] ?? []) as $ag)
+                                    <tr>
+                                        <td>{{ $ag['nom'] ?? 'N/A' }} {{ $ag['prenom'] ?? '' }}</td>
+                                        <td>{{ $ag['postes_total'] }}</td>
+                                        <td>{{ number_format($ag['prix_poste'], 0, '.', ' ') }} FCFA</td>
+                                        <td>{{ number_format($ag['total_agent'], 0, '.', ' ') }} FCFA</td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-muted text-center">Aucun agent attribué</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-sm table-striped table-bordered">
                             <thead style="background-color: #f8f9fa;">

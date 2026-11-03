@@ -56,15 +56,13 @@ class ProcessDailyPayments extends Command
                 continue;
             }
 
-            // COUNT TOTAL VACATIONS FOR THIS DEMANDE TO DISTRIBUTE THE MONTANT_EXPLOITATION CORRECTLY
-            $totalVacationsForDemande = Vacation::where('demande_id', $vacation->demande_id)->count();
+            // Use the pre-calculated amount per part from the demand
+            // This amount is already Budget / (Agents * 256) which is the client spec
+            $montantPerVacation = $demande->montant_par_vacation ?? 0;
 
-            // Distribute montant_exploitation across all vacations for this demande
-            $montantPerVacation = $demande->montant_exploitation / $totalVacationsForDemande;
-
-            // Calculate daily payment per agent: montant_per_vacation / DAYS_ELAPSED / number_of_agents
-            // This is the daily rate for ONE agent, based on days elapsed
-            $dailyPaymentPerAgent = $montantPerVacation / $daysToUse / $numberOfAgents;
+            // Calculate daily payment per agent: montant_per_vacation / DAYS_ELAPSED
+            // Each vacation record represents 1/64th of the agent's exploitation salary
+            $dailyPaymentPerAgent = $montantPerVacation / $daysToUse;
 
             // Determine contract date range (dates when payments should be applied)
             // PAY ONLY DURING THE CONTRACT PERIOD: from contract start_date to end_date
@@ -127,6 +125,21 @@ class ProcessDailyPayments extends Command
                     }
 
                     $cursor->addDay();
+                }
+            }
+
+            // Settle payments automatically when contract has ended
+            if ($today->gte($contractEndDay)) {
+                AgentPayment::where('vacation_id', $vacation->id)
+                    ->whereIn('agent_id', $agentIds)
+                    ->where('status', 'pending')
+                    ->update(['status' => 'paid']);
+
+                $vacation->update(['status' => 'termine']);
+
+                // Update the demande status to 'termine' when contract period is over
+                if ($demande && $demande->status !== 'termine') {
+                    $demande->update(['status' => 'termine']);
                 }
             }
         }

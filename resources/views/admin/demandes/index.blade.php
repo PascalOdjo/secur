@@ -166,12 +166,18 @@
                                     <div class="form-row align-items-end">
                                         <div class="form-group col-md-5 mb-0">
                                             <label class="small font-weight-bold">Sélectionner l'agent</label>
-                                            <select name="agent_id" class="form-control form-control-sm select2" required>
-                                                <option value="">-- Choisir un agent --</option>
+                                            <select name="agent_id" class="form-control form-control-sm select2" required @if($allAgents->isEmpty()) disabled @endif>
+                                                <option value="">{{ $allAgents->isEmpty() ? 'Aucun agent disponible' : '-- Choisir un agent --' }}</option>
                                                 @foreach($allAgents as $agentOpt)
                                                     <option value="{{ $agentOpt->id }}">{{ $agentOpt->nom }} {{ $agentOpt->prenom }}</option>
                                                 @endforeach
                                             </select>
+                                            @if($allAgents->isEmpty())
+                                            <div class="text-danger small mt-2">
+                                                Aucun agent disponible pour l’attribution.
+                                            </div>
+                                            <a href="{{ route('admin.agents.create') }}" class="btn btn-xs btn-outline-primary mt-1">Créer un agent</a>
+                                            @endif
                                         </div>
                                         <div class="form-group col-md-4 mb-0">
                                             <label class="small font-weight-bold">Type de Vacation</label>
@@ -181,7 +187,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-md-3 mb-0">
-                                            <button type="submit" class="btn btn-sm btn-primary btn-block">
+                                            <button type="submit" class="btn btn-sm btn-primary btn-block" @if($allAgents->isEmpty()) disabled @endif>
                                                 <i class="ri-check-line"></i> Attribuer
                                             </button>
                                         </div>

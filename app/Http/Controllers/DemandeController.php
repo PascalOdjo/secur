@@ -120,10 +120,12 @@ class DemandeController extends Controller
         $montantExploitation = $montantTotal / 2;
         $montantTresorerie = $montantTotal / 2;
 
-        // Salaire par agent (clé du système)
+        // Part Exploitation par agent (50% du montant par agent)
+        // Ex: 130 000 / 2 = 65 000
         $salaireParAgent = $montantParAgent / 2;
 
-        // Montant par vacation (divisé en 64: 16A + 16B + 16C + 16D = 64 par agent)
+        // Montant par unité de vacation : Salaire exploitation / 64 records par agent (16A+16B+16C+16D)
+        // Ex: 65 000 / 64 = ~1015.63 CFA
         $montantParVacation = $salaireParAgent / 64;
 
         // Mettre à jour les montants calculés
@@ -139,7 +141,7 @@ class DemandeController extends Controller
         // Créer automatiquement une facture pour la demande
         $invoice = new Invoice();
         $invoice->demande_id = $demande->id;
-        $invoice->total_amount = $montantExploitation; // Utiliser montant_exploitation
+        $invoice->total_amount = $montantTotal;
         $invoice->agent_payment = 0; // Sera calculé avec les paiements quotidiens
         $invoice->agency_payment = 0; // À définir selon votre politique
         $invoice->status = 'pending'; // La facture est en attente jusqu'à la fin du contrat
@@ -173,7 +175,18 @@ class DemandeController extends Controller
         }
 
         $demandes = $query->latest()->get();
-        $allAgents = Agent::orderBy('nom')->get();
+        // Exclure les agents déjà attribués à une demande en cours (non terminée)
+        $busyAgentIds = \App\Models\Contrat::whereNotNull('agent_id')
+            ->whereHas('demande', function ($q) {
+                $q->where(function ($inner) {
+                    $inner->whereNull('end_date')
+                          ->orWhere('end_date', '>=', \Carbon\Carbon::now()->toDateString());
+                })->where('status', '!=', 'termine');
+            })
+            ->pluck('agent_id')
+            ->unique();
+
+        $allAgents = Agent::whereNotIn('id', $busyAgentIds)->orderBy('nom')->get();
 
         return view('admin.demandes.index', compact('demandes', 'allAgents'));
     }
@@ -233,7 +246,7 @@ class DemandeController extends Controller
         // Mettre à jour la facture
         if ($demande->invoice) {
             $demande->invoice->update([
-                'total_amount' => $amounts['montant_exploitation'],
+                'total_amount' => $amounts['montant_brut'],
             ]);
         }
 
@@ -254,9 +267,31 @@ class DemandeController extends Controller
 
     public function show($id)
     {
+        $demandes = Demande::with([
+            'client',
+            'site',
+            'vacations.agent1',
+            'vacations.agent2',
+            'invoice'
+        ])->findOrFail($id);
 
-        $demandes = Demande::findOrFail($id);
-        // dd($demandes->status);
+        // Fallback calculs si certaines valeurs ne sont pas encore définies
+        // Salaire par agent et montant par vacation/poste
+        if (!$demandes->salaire_par_agent && $demandes->montant_par_agent > 0) {
+            $demandes->salaire_par_agent = $demandes->montant_par_agent / 2;
+        }
+        if (!$demandes->montant_par_vacation && $demandes->salaire_par_agent > 0) {
+            $demandes->montant_par_vacation = $demandes->salaire_par_agent / 64;
+        }
+
+        // Montants exploitation / trésorerie
+        if ((!$demandes->montant_exploitation || !$demandes->montant_tresorerie) && ($demandes->montant_par_agent > 0 && $demandes->nombre_agents > 0)) {
+            $montantTotal = $demandes->nombre_agents * $demandes->montant_par_agent;
+            $demandes->montant_brut = $montantTotal;
+            $demandes->montant_exploitation = $montantTotal / 2;
+            $demandes->montant_tresorerie = $montantTotal / 2;
+        }
+
         return view('admin.demandes.show', compact('demandes'));
     }
 
@@ -361,8 +396,6 @@ class DemandeController extends Controller
 
             // Calculer selon le nouveau système
             $montantTotal = $nombreAgents * $montantParAgent;
-            $montantExploitation = $montantTotal / 2;
-            $montantTresorerie = $montantTotal / 2;
             $salaireParAgent = $montantParAgent / 2;
             $montantParVacation = $salaireParAgent / 64;
 
@@ -422,6 +455,21 @@ class DemandeController extends Controller
 
         $agent = Agent::find($request->agent_id);
         $shiftType = $request->shift; // 'jour' ou 'nuit'
+
+        // Empêcher l'attribution si l'agent est déjà attribué à une autre demande en cours
+        $alreadyAssignedElsewhere = \App\Models\Contrat::where('agent_id', $agent->id)
+            ->whereHas('demande', function ($q) use ($demande) {
+                $q->where(function ($inner) {
+                    $inner->whereNull('end_date')
+                          ->orWhere('end_date', '>=', \Carbon\Carbon::now()->toDateString());
+                })->where('status', '!=', 'termine')
+                  ->where('id', '!=', $demande->id);
+            })
+            ->exists();
+
+        if ($alreadyAssignedElsewhere) {
+            return redirect()->back()->with('error', 'Cet agent est déjà attribué à une autre demande en cours.');
+        }
 
         // 1. Trouver le premier slot de 64 contrats vides pour cette demande
         $unassignedContracts = $demande->contrats()->whereNull('agent_id')->orderBy('id')->get();

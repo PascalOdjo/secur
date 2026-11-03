@@ -80,23 +80,25 @@ class PaymentCalculatorService
      */
     public function calculateContractBreakdown(float $exploitationValue): array
     {
-        $step1 = $exploitationValue / 2;  // 256 / 2 = 128
-        $step2 = $step1 / 2;               // 128 / 2 = 64 (contracts)
-        $step3 = $step2 / 4;               // 64 / 4 = 16
-        $step4 = $step3 / 16;              // 16 / 16 = 1 (contract)
+        $step1 = $exploitationValue / 2;  // Ex: 256 / 2 = 128
+        $step2 = $step1 / 2;               // Ex: 128 / 2 = 64 (nb de vacations total si 4 agents)
+        $step3 = $step2 / 4;               // Ex: 64 / 4 = 16 (nb de vacations par agent)
+        $step4 = $step3 / 16;              // Ex: 16 / 16 = 1 (valeur d'une vacation en unités)
 
         $realContracts = 1;
         $virtualContracts = 3;
         $totalContracts = $realContracts + $virtualContracts;
 
-        // Price per contract
-        $pricePerContract = $step4 / $totalContracts;
+        // D'après les spécifications, le montant (par vacation) est encore divisé par 4
+        // pour obtenir le montant journalier d'une vacation (partie de contrat).
+        // step4 (1 unité) est le montant par vacation/squad, on le divise par 4.
+        $pricePerContract = $step4 / $totalContracts; 
 
         return [
-            'step1' => $step1,              // 128
-            'step2' => $step2,              // 64 (contracts count)
-            'step3' => $step3,              // 16
-            'step4' => $step4,              // 1 (base contract value)
+            'step1' => $step1,
+            'step2' => $step2,
+            'step3' => $step3,
+            'step4' => $step4,
             'real_contracts' => $realContracts,
             'virtual_contracts' => $virtualContracts,
             'total_contracts' => $totalContracts,

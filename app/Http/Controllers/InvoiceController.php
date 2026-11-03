@@ -53,9 +53,12 @@ class InvoiceController extends Controller
         // Création de la facture basée sur la demande
         $invoice = new Invoice();
         $invoice->demande_id = $demande->id;
-        $invoice->total_amount = $demande->montant; // Utiliser le montant de la demande
-        $invoice->agent_payment = 0; // Sera mis à jour avec les paiements quotidiens
-        $invoice->agency_payment = 0; // À définir selon votre politique
+        // Total = exploitation + trésorerie = montant brut
+        $totalBrut = $demande->montant_brut ?? (($demande->nombre_agents ?? 0) * ($demande->montant_par_agent ?? 0));
+        $invoice->total_amount = $totalBrut;
+        // Initialiser le breakdown (sera recalculé dynamiquement ensuite)
+        $invoice->agent_payment = 0;
+        $invoice->agency_payment = $demande->montant_tresorerie ?? 0;
         $invoice->status = 'pending'; // La facture est en attente
         $invoice->save();
 

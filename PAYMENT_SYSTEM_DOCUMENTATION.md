@@ -27,23 +27,21 @@ L'exploitation (256 unités) suit une cascade de divisions pour créer les contr
 
 ```
 256 (Exploitation)
-  ↓ / 2
-128
-  ↓ / 2
-64 (nombre de contrats abstraits)
-  ↓ / 4
-16
-  ↓ / 16
-1 (contrat de base)
-  ↓ / 4
-0.25 = 1 RÉEL + 3 VIRTUELS
+  ↓ / 4 (nombre d'agents)
+64 (unités en exploitation par agent)
+  ↓ / 16 (nombre de vacations par agent)
+4 (unités par vacation)
+  ↓ / 4 (parts par vacation: 1 réelle + 3 virtuelles)
+1 (unité par vacation)
+  ↓ / 4 (division finale spécifiée par le client)
+0.25 (unité par contrat/part) = 205 CFA francs
 ```
 
 ### Résultat final pour 1 demande (4 agents)
 
-- **1 contrat réel** (1/4 de 1 unité)
-- **3 contrats virtuels** (1/4 chacun de 1 unité)
-- **Prix par contrat** = 1 unité / 4 contrats = 0.25 unité = **205 CFA francs**
+- **1 contrat réel** (0.25 unité)
+- **3 contrats virtuels** (0.25 unité chacun)
+- **Prix par contrat (Journalier)** = 0.25 unité = **205 CFA francs**
 
 ## Codes de vacation
 
@@ -201,10 +199,9 @@ Split exploitation/trésorerie:
 - Trésorerie: 256 unités
 
 Contrats réels/virtuels:
-- 256 / 2 = 128
-- 128 / 2 = 64
-- 64 / 4 = 16
-- 16 / 16 = 1 unité
+- 256 / 4 = 64
+- 64 / 16 = 4 unités par vacation
+- 4 / 4 = 1 unité
 - 1 / 4 = 0.25 unité par contrat = 205 CFA par contrat
 
 En CFA:

@@ -24,15 +24,53 @@
     </div>
     <!-- End Breadcrumbbar -->
     <div class="contentbar">
+        <style>
+            @media print {
+                @page { size: A4; margin: 20mm 15mm; }
+                .leftbar, .topbar, .footerbar, .breadcrumbbar, .widgetbar, .page-title { display: none !important; }
+                .rightbar { width: 100% !important; margin: 0 !important; }
+                .invoice-print { padding-top: 0; }
+            }
+            .print-header { margin-bottom: 20px; }
+        </style>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card m-b-30">
                     <div class="card-header">
                         @include('_message')
                         <h5 class="card-title">Détails de la Facture</h5>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print()">
+                                <i class="ri-printer-line"></i> Imprimer
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p><strong>Montant Total :</strong> {{ $invoice->total_amount }} Francs CFA</p>
+                    <div class="card-body invoice-print">
+                        <div class="print-header">
+                            <h3 class="mb-1">Facture #{{ $invoice->id }}</h3>
+                            <div class="text-muted">
+                                {{ $invoice->demande && $invoice->demande->client ? ($invoice->demande->client->nom . ' ' . ($invoice->demande->client->prenom ?? '')) : '' }}
+                            </div>
+                        </div>
+                        @php
+                            $exploit = $invoice->demande->montant_exploitation ?? 0;
+                            $tresor = $invoice->demande->montant_tresorerie ?? 0;
+                            $brut = $invoice->demande->montant_brut ?? $invoice->total_amount;
+                        @endphp
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div><strong>Montant total (brut)</strong></div>
+                                <div class="text-primary font-weight-bold">{{ number_format($brut, 0, ',', ' ') }} FCFA</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div><strong>Exploitation (50%)</strong></div>
+                                <div class="text-info font-weight-bold">{{ number_format($exploit, 0, ',', ' ') }} FCFA</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div><strong>Trésorerie (50%)</strong></div>
+                                <div class="text-secondary font-weight-bold">{{ number_format($tresor, 0, ',', ' ') }} FCFA</div>
+                            </div>
+                        </div>
                         <p><strong>Statut :</strong> {{ ucfirst($invoice->status) }}</p>
                         <p><strong>Date de Création :</strong> {{ $invoice->created_at->format('d/m/Y') }}</p>
 

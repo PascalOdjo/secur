@@ -63,25 +63,23 @@
                                         </td>
                                         <td>
                                             <div class="d-flex flex-column">
+                                                @php
+                                                    $exploit = $invoice->demande->montant_exploitation ?? 0;
+                                                    $tresorerie = $invoice->demande->montant_tresorerie ?? 0;
+                                                @endphp
                                                 <div class="d-flex justify-content-between mb-1" style="min-width: 200px;">
                                                     <span class="small text-muted">Exploitation:</span>
-                                                    <span class="badge badge-info">{{ number_format($invoice->total_amount, 0, ',', ' ') }}</span>
+                                                    <span class="badge badge-info">{{ number_format($exploit, 0, ',', ' ') }}</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between">
                                                     <span class="small text-muted">Trésorerie:</span>
-                                                    @php
-                                                        $tresorerie = $invoice->demande ? $invoice->demande->montant_tresorerie : $invoice->total_amount;
-                                                    @endphp
                                                     <span class="badge badge-secondary">{{ number_format($tresorerie, 0, ',', ' ') }}</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="text-primary font-weight-bold">
-                                                @php
-                                                    $total = $invoice->demande ? $invoice->demande->montant_brut : ($invoice->total_amount * 2);
-                                                @endphp
-                                                {{ number_format($total, 0, ',', ' ') }} CFA
+                                                {{ number_format($invoice->demande->montant_brut ?? $invoice->total_amount, 0, ',', ' ') }} CFA
                                             </div>
                                         </td>
                                         <td>
